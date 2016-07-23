@@ -30,20 +30,28 @@
 static int conn_cipher_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    const char *cipher = tls_conn_cipher( tls->ctx );
 
-    lua_pushstring( L, tls_conn_cipher( tls->ctx ) );
+    if( cipher ){
+        lua_pushstring( L, cipher );
+        return 1;
+    }
 
-    return 1;
+    return 0;
 }
 
 
 static int conn_version_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    const char *ver = tls_conn_version( tls->ctx );
 
-    lua_pushstring( L, tls_conn_version( tls->ctx ) );
+    if( ver ){
+        lua_pushstring( L, ver );
+        return 1;
+    }
 
-    return 1;
+    return 0;
 }
 
 
@@ -70,30 +78,42 @@ static int peer_cert_notbefore_lua( lua_State *L )
 static int peer_cert_subject_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    const char *sbj = tls_peer_cert_subject( tls->ctx );
 
-    lua_pushstring( L, tls_peer_cert_subject( tls->ctx ) );
+    if( sbj ){
+        lua_pushstring( L, sbj );
+        return 1;
+    }
 
-    return 1;
+    return 0;
 }
 
 
 static int peer_cert_issuer_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    const char *iss = tls_peer_cert_issuer( tls->ctx );
 
-    lua_pushstring( L, tls_peer_cert_issuer( tls->ctx ) );
+    if( iss ){
+        lua_pushstring( L, iss );
+        return 1;
+    }
 
-    return 1;
+    return 0;
 }
 
 
 static int peer_cert_hash_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    const char *hash = tls_peer_cert_hash( tls->ctx );
 
-    lua_pushstring( L, tls_peer_cert_hash( tls->ctx ) );
+    if( hash ){
+        lua_pushstring( L, hash );
+        return 1;
+    }
 
-    return 1;
+    return 0;
 }
 
 
