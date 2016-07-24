@@ -457,6 +457,12 @@ LUALIB_API int luaopen_libtls( lua_State *L )
     };
     struct luaL_Reg *ptr = funcs;
 
+    // initialize global data
+    if( tls_init() ){
+        lua_pushstring( L, strerror( errno ) );
+        return lua_error( L );
+    }
+
     // register metatable
     libtls_newmetatable( L, LIBTLS_MT, mmethod, method );
 
