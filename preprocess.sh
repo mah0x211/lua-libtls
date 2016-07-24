@@ -5,6 +5,6 @@ set -x
 
 cd deps/libressl/
 ./autogen.sh
-./configure
+./configure --with-openssldir=${LUA_CONFDIR}
 make
 make check
