@@ -152,6 +152,44 @@ static int set_protocols_lua( lua_State *L )
 }
 
 
+static int set_keypair_lua( lua_State *L )
+{
+     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+     size_t clen = 0;
+     const uint8_t *cert = (const uint8_t*)lauxh_checklstring( L, 2, &clen );
+     size_t klen = 0;
+     const uint8_t *key = (const uint8_t*)lauxh_checklstring( L, 3, &klen );
+
+     if( tls_config_set_keypair_mem( cfg->ctx, cert, clen, key, klen ) ){
+         lua_pushboolean( L, 0 );
+         lua_pushstring( L, strerror( errno ) );
+         return 2;
+     }
+
+     lua_pushboolean( L, 1 );
+
+     return 1;
+}
+
+
+static int set_keypair_file_lua( lua_State *L )
+{
+     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+     const char *cert = lauxh_checkstring( L, 2 );
+     const char *key = lauxh_checkstring( L, 3 );
+
+     if( tls_config_set_keypair_file( cfg->ctx, cert, key ) ){
+         lua_pushboolean( L, 0 );
+         lua_pushstring( L, strerror( errno ) );
+         return 2;
+     }
+
+     lua_pushboolean( L, 1 );
+
+     return 1;
+}
+
+
 static int set_key_lua( lua_State *L )
 {
      ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
@@ -397,6 +435,9 @@ LUALIB_API int luaopen_libtls_config( lua_State *L )
 
         { "set_key_file", set_key_file_lua },
         { "set_key", set_key_lua },
+
+        { "set_keypair_file", set_keypair_file_lua },
+        { "set_keypair", set_keypair_lua },
 
         { "set_protocols", set_protocols_lua },
         { "set_verify_depth", set_verify_depth_lua },
