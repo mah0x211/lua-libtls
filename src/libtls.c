@@ -255,7 +255,7 @@ static int connect_socket_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
     int sock = lauxh_checkinteger( L, 2 );
-    const char *servername = lauxh_checkstring( L, 3 );
+    const char *servername = lauxh_optstring( L, 3, NULL );
 
     if( tls_connect_socket( tls->ctx, sock, servername ) ){
         lua_pushboolean( L, 0 );
@@ -273,8 +273,8 @@ static int connect_servername_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
     const char *host = lauxh_checkstring( L, 2 );
-    const char *port = lauxh_checkstring( L, 3 );
-    const char *servername = lauxh_checkstring( L, 4 );
+    const char *port = lauxh_optstring( L, 3, NULL );
+    const char *servername = lauxh_optstring( L, 4, NULL );
 
     if( tls_connect_servername( tls->ctx, host, port, servername ) ){
         lua_pushboolean( L, 0 );
@@ -293,7 +293,7 @@ static int connect_fds_lua( lua_State *L )
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
     int fdr = lauxh_checkinteger( L, 2 );
     int fdw = lauxh_checkinteger( L, 3 );
-    const char *servername = lauxh_checkstring( L, 4 );
+    const char *servername = lauxh_optstring( L, 4, NULL );
 
     if( tls_connect_fds( tls->ctx, fdr, fdw, servername ) ){
         lua_pushboolean( L, 0 );
@@ -311,7 +311,7 @@ static int connect_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
     const char *host = lauxh_checkstring( L, 2 );
-    const char *port = lauxh_checkstring( L, 3 );
+    const char *port = lauxh_optstring( L, 3, NULL );
 
     if( tls_connect( tls->ctx, host, port ) ){
         lua_pushboolean( L, 0 );
