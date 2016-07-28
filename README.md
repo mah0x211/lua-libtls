@@ -549,7 +549,7 @@ enables client certificate verification, without requiring the client to send a 
 clears any secret keys from memory.
 
 
-## Common configuration methods for server
+## Configuration methods for server
 
 
 ### cfg:prefer_ciphers_client()
@@ -562,7 +562,7 @@ prefers ciphers in the client's cipher list when selecting a cipher suite. This 
 prefers ciphers in the server's cipher list when selecting a cipher suite. This is considered to be more secure than preferring the client's list and is the default.
 
 
-## Common configuration methods for client
+## Configuration methods for client
 
 
 ### cfg:insecure_noverifyname()
