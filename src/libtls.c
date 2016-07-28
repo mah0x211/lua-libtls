@@ -293,7 +293,7 @@ static int connect_fds_lua( lua_State *L )
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
     int fdr = lauxh_checkinteger( L, 2 );
     int fdw = lauxh_checkinteger( L, 3 );
-    const char *servername = lauxh_checkstring( L, 3 );
+    const char *servername = lauxh_checkstring( L, 4 );
 
     if( tls_connect_fds( tls->ctx, fdr, fdw, servername ) ){
         lua_pushboolean( L, 0 );
