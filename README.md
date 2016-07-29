@@ -168,7 +168,7 @@ reads bufsize bytes of data from the socket.
 
 **Params**
 
-- `bufsize:number`:  working buffer size of receive operation. (default: size of `stdio.h` buffers)
+- `bufsize:number`:  working buffer size of receive operation. (default: `BUFSIZ` that size of `stdio.h` buffers)
 
 **Returns**
 
