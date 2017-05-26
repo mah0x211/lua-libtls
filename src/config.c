@@ -83,6 +83,16 @@ static int verify_lua( lua_State *L )
 }
 
 
+static int ocsp_require_stapling_lua( lua_State *L )
+{
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+
+    tls_config_ocsp_require_stapling( cfg->ctx );
+
+    return 0;
+}
+
+
 static int insecure_noverifytime_lua( lua_State *L )
 {
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
@@ -588,6 +598,7 @@ LUALIB_API int luaopen_libtls_config( lua_State *L )
         { "insecure_noverifyname", insecure_noverifyname_lua },
         { "insecure_noverifytime", insecure_noverifytime_lua },
         { "verify", verify_lua },
+        { "ocsp_require_stapling", ocsp_require_stapling_lua },
         { "verify_client", verify_client_lua },
         { "verify_client_optional", verify_client_optional_lua },
 
