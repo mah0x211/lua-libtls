@@ -146,7 +146,12 @@ static int set_protocols_lua( lua_State *L )
         case TLS_PROTOCOL_TLSv1_1:
         case TLS_PROTOCOL_TLSv1_2:
         case TLS_PROTOCOL_TLSv1:
-            tls_config_set_protocols( cfg->ctx, protocols );
+            if( tls_config_set_protocols( cfg->ctx, protocols ) ){
+                lua_pushboolean( L, 0 );
+                lua_pushstring( L, strerror( errno ) );
+                return 2;
+            }
+
             lua_pushboolean( L, 1 );
             return 1;
 
