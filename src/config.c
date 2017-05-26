@@ -363,6 +363,39 @@ static int set_ca_file_lua( lua_State *L )
 }
 
 
+static int add_keypair_file_lua( lua_State *L )
+{
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *cert_file = lauxh_checkstring( L, 2 );
+    const char *key_file = lauxh_checkstring( L, 3 );
+
+    if( lua_gettop( L ) < 4 )
+    {
+        if( tls_config_add_keypair_file( cfg->ctx, cert_file, key_file ) ){
+            lua_pushboolean( L, 0 );
+            lua_pushstring( L, strerror( errno ) );
+            return 2;
+        }
+    }
+    // with ocsp file
+    else
+    {
+        const char *ocsp_file = lauxh_checkstring( L, 4 );
+
+        if( tls_config_add_keypair_ocsp_file( cfg->ctx, cert_file, key_file,
+                                              ocsp_file ) ){
+            lua_pushboolean( L, 0 );
+            lua_pushstring( L, strerror( errno ) );
+            return 2;
+        }
+    }
+
+    lua_pushboolean( L, 1 );
+
+    return 1;
+}
+
+
 static int tostring_lua( lua_State *L )
 {
     return TOSTRING_MT( L, LIBTLS_CONFIG_MT );
@@ -422,6 +455,8 @@ LUALIB_API int luaopen_libtls_config( lua_State *L )
         { NULL, NULL }
     };
     struct luaL_Reg method[] = {
+        { "add_keypair_file", add_keypair_file_lua },
+
         { "set_ca_file", set_ca_file_lua },
         { "set_ca_path", set_ca_path_lua },
         { "set_ca", set_ca_lua },
