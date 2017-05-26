@@ -617,3 +617,8 @@ sets the maximum depth for the certificate chain verification that shall be allo
 
 - `depth:number`: maximum depth for the certificate chain verification.
 
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message
+
