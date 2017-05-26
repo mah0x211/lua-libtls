@@ -43,6 +43,24 @@ static inline int config_error_lua( lua_State *L, ltls_config_t *cfg )
 }
 
 
+static int add_ticket_key_lua( lua_State *L )
+{
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    lua_Integer keyrev = lauxh_checkinteger( L, 2 );
+    size_t len = 0;
+    const char *key = lauxh_checklstring( L, 3, &len );
+
+    if( tls_config_add_ticket_key( cfg->ctx, (uint32_t) keyrev,
+                                   (unsigned char*)key, len ) ){
+        return config_error_lua( L, cfg );
+    }
+
+    lua_pushboolean( L, 1 );
+
+    return 1;
+}
+
+
 static int set_session_lifetime_lua( lua_State *L )
 {
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
@@ -637,6 +655,7 @@ LUALIB_API int luaopen_libtls_config( lua_State *L )
 
         { "set_session_id", set_session_id_lua },
         { "set_session_lifetime", set_session_lifetime_lua },
+        { "add_ticket_key", add_ticket_key_lua },
         { NULL, NULL }
     };
     struct luaL_Reg funcs[] = {
