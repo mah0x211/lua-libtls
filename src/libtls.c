@@ -42,6 +42,22 @@ static inline int tls_error_lua( lua_State *L, ltls_t *tls )
 }
 
 
+static int ocsp_process_response_lua( lua_State *L )
+{
+    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    size_t len = 0;
+    const char *res = lauxh_checklstring( L, 2, &len );
+
+    if( tls_ocsp_process_response( tls->ctx, (const unsigned char*)res, len ) ){
+        return tls_error_lua( L, tls );
+    }
+
+    lua_pushboolean( L, 1 );
+
+    return 1;
+}
+
+
 static int conn_version_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
@@ -485,6 +501,7 @@ LUALIB_API int luaopen_libtls( lua_State *L )
         { "conn_cipher", conn_cipher_lua },
         { "conn_servername", conn_servername_lua },
         { "conn_version", conn_version_lua },
+        { "ocsp_process_response", ocsp_process_response_lua },
         { NULL, NULL }
     };
     struct luaL_Reg funcs[] = {
