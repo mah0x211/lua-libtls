@@ -562,6 +562,40 @@ prefers ciphers in the client's cipher list when selecting a cipher suite. This 
 prefers ciphers in the server's cipher list when selecting a cipher suite. This is considered to be more secure than preferring the client's list and is the default.
 
 
+### ok, err = cfg:set_dheparams( params )
+
+Tune the dheparams.
+
+**Params**
+
+- `params:string`: "none", "auto" or "legacy".
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message
+
+
+### ok, err = cfg:set_ecdhecurve( name )
+
+Use the specified EC DHE curve.
+
+please check the list of names that can be specified with the following command;
+
+```sh
+$ openssl ecparam -list_curves
+```
+
+**Params**
+
+- `name:string`: "none", "auto" or any NID value understood by OBJ_txt2nid(3).
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message
+
+
 ## Configuration methods for client
 
 
@@ -575,9 +609,11 @@ disables server name verification. Be careful when using this option.
 reenables server name and certificate verification.
 
 
-## Undocumented methods
+### cfg:set_verify_depth( depth )
 
-- ok, err = cfg:set_dheparams( params )
-- ok, err = cfg:set_ecdhecurve( name )
-- cfg:set_verify_depth( depth )
+sets the maximum depth for the certificate chain verification that shall be allowed for ctx.
+
+**Params**
+
+- `depth:number`: maximum depth for the certificate chain verification.
 
