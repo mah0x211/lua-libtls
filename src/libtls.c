@@ -41,6 +41,20 @@ static int conn_cipher_lua( lua_State *L )
 }
 
 
+static int conn_alpn_selected_lua( lua_State *L )
+{
+    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    const char *alpn = tls_conn_alpn_selected( tls->ctx );
+
+    if( alpn ){
+        lua_pushstring( L, alpn );
+        return 1;
+    }
+
+    return 0;
+}
+
+
 static int conn_version_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
@@ -447,6 +461,7 @@ LUALIB_API int luaopen_libtls( lua_State *L )
         { "peer_cert_notbefore", peer_cert_notbefore_lua },
         { "peer_cert_notafter", peer_cert_notafter_lua },
         { "conn_version", conn_version_lua },
+        { "conn_alpn_selected", conn_alpn_selected_lua },
         { "conn_cipher", conn_cipher_lua },
         { NULL, NULL }
     };
