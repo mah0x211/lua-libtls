@@ -182,8 +182,22 @@ static int set_keypair_lua( lua_State *L )
     size_t klen = 0;
     const uint8_t *key = (const uint8_t*)lauxh_checklstring( L, 3, &klen );
 
-    if( tls_config_set_keypair_mem( cfg->ctx, cert, clen, key, klen ) ){
-        return config_error_lua( L, cfg );
+    if( lua_gettop( L ) < 4 )
+    {
+        if( tls_config_set_keypair_mem( cfg->ctx, cert, clen, key, klen ) ){
+            return config_error_lua( L, cfg );
+        }
+    }
+    // with ocsp
+    else
+    {
+        size_t olen = 0;
+        const uint8_t *ocsp = (const uint8_t*)lauxh_checklstring( L, 4, &olen );
+
+        if( tls_config_set_keypair_ocsp_mem( cfg->ctx, cert, clen, key, klen,
+                                             ocsp, olen ) ){
+            return config_error_lua( L, cfg );
+        }
     }
 
     lua_pushboolean( L, 1 );
