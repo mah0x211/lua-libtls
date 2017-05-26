@@ -30,336 +30,336 @@
 
 static int clear_keys_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
 
-     tls_config_clear_keys( cfg->ctx );
+    tls_config_clear_keys( cfg->ctx );
 
-     return 0;
+    return 0;
 }
 
 
 static int verify_client_optional_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
 
-     tls_config_verify_client_optional( cfg->ctx );
+    tls_config_verify_client_optional( cfg->ctx );
 
-     return 0;
+    return 0;
 }
 
 
 static int verify_client_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
 
-     tls_config_verify_client( cfg->ctx );
+    tls_config_verify_client( cfg->ctx );
 
-     return 0;
+    return 0;
 }
 
 
 static int verify_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
 
-     tls_config_verify( cfg->ctx );
+    tls_config_verify( cfg->ctx );
 
-     return 0;
+    return 0;
 }
 
 
 static int insecure_noverifytime_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
 
-     tls_config_insecure_noverifytime( cfg->ctx );
+    tls_config_insecure_noverifytime( cfg->ctx );
 
-     return 0;
+    return 0;
 }
 
 
 static int insecure_noverifyname_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
 
-     tls_config_insecure_noverifyname( cfg->ctx );
+    tls_config_insecure_noverifyname( cfg->ctx );
 
-     return 0;
+    return 0;
 }
 
 
 static int insecure_noverifycert_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
 
-     tls_config_insecure_noverifycert( cfg->ctx );
+    tls_config_insecure_noverifycert( cfg->ctx );
 
-     return 0;
+    return 0;
 }
 
 
 static int prefer_ciphers_server_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
 
-     tls_config_prefer_ciphers_server( cfg->ctx );
+    tls_config_prefer_ciphers_server( cfg->ctx );
 
-     return 0;
+    return 0;
 }
 
 
 static int prefer_ciphers_client_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
 
-     tls_config_prefer_ciphers_client( cfg->ctx );
+    tls_config_prefer_ciphers_client( cfg->ctx );
 
-     return 0;
+    return 0;
 }
 
 
 static int set_verify_depth_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     int depth = lauxh_checkinteger( L, 2 );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    int depth = lauxh_checkinteger( L, 2 );
 
-     tls_config_set_verify_depth( cfg->ctx, depth );
+    tls_config_set_verify_depth( cfg->ctx, depth );
 
-     return 0;
+    return 0;
 }
 
 
 static int set_protocols_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     uint32_t protocols = (uint32_t)lauxh_checkinteger( L, 2 );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    uint32_t protocols = (uint32_t)lauxh_checkinteger( L, 2 );
 
-     switch( protocols )
-     {
-        case TLS_PROTOCOL_TLSv1_0:
-        case TLS_PROTOCOL_TLSv1_1:
-        case TLS_PROTOCOL_TLSv1_2:
-        case TLS_PROTOCOL_TLSv1:
-            tls_config_set_protocols( cfg->ctx, protocols );
-            lua_pushboolean( L, 1 );
-            return 1;
+    switch( protocols )
+    {
+    case TLS_PROTOCOL_TLSv1_0:
+    case TLS_PROTOCOL_TLSv1_1:
+    case TLS_PROTOCOL_TLSv1_2:
+    case TLS_PROTOCOL_TLSv1:
+        tls_config_set_protocols( cfg->ctx, protocols );
+        lua_pushboolean( L, 1 );
+        return 1;
 
-        default:
-             lua_pushboolean( L, 0 );
-             lua_pushstring( L, strerror( EINVAL ) );
-             return 2;
-     }
+    default:
+            lua_pushboolean( L, 0 );
+            lua_pushstring( L, strerror( EINVAL ) );
+            return 2;
+    }
 }
 
 
 static int set_keypair_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     size_t clen = 0;
-     const uint8_t *cert = (const uint8_t*)lauxh_checklstring( L, 2, &clen );
-     size_t klen = 0;
-     const uint8_t *key = (const uint8_t*)lauxh_checklstring( L, 3, &klen );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    size_t clen = 0;
+    const uint8_t *cert = (const uint8_t*)lauxh_checklstring( L, 2, &clen );
+    size_t klen = 0;
+    const uint8_t *key = (const uint8_t*)lauxh_checklstring( L, 3, &klen );
 
-     if( tls_config_set_keypair_mem( cfg->ctx, cert, clen, key, klen ) ){
-         lua_pushboolean( L, 0 );
-         lua_pushstring( L, strerror( errno ) );
-         return 2;
-     }
+    if( tls_config_set_keypair_mem( cfg->ctx, cert, clen, key, klen ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-     lua_pushboolean( L, 1 );
+    lua_pushboolean( L, 1 );
 
-     return 1;
+    return 1;
 }
 
 
 static int set_keypair_file_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     const char *cert = lauxh_checkstring( L, 2 );
-     const char *key = lauxh_checkstring( L, 3 );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *cert = lauxh_checkstring( L, 2 );
+    const char *key = lauxh_checkstring( L, 3 );
 
-     if( tls_config_set_keypair_file( cfg->ctx, cert, key ) ){
-         lua_pushboolean( L, 0 );
-         lua_pushstring( L, strerror( errno ) );
-         return 2;
-     }
+    if( tls_config_set_keypair_file( cfg->ctx, cert, key ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-     lua_pushboolean( L, 1 );
+    lua_pushboolean( L, 1 );
 
-     return 1;
+    return 1;
 }
 
 
 static int set_key_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     size_t len = 0;
-     const uint8_t *key = (const uint8_t*)lauxh_checklstring( L, 2, &len );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    size_t len = 0;
+    const uint8_t *key = (const uint8_t*)lauxh_checklstring( L, 2, &len );
 
-     if( tls_config_set_key_mem( cfg->ctx, key, len ) ){
-         lua_pushboolean( L, 0 );
-         lua_pushstring( L, strerror( errno ) );
-         return 2;
-     }
+    if( tls_config_set_key_mem( cfg->ctx, key, len ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-     lua_pushboolean( L, 1 );
+    lua_pushboolean( L, 1 );
 
-     return 1;
+    return 1;
 }
 
 
 static int set_key_file_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     const char *file = lauxh_checkstring( L, 2 );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *file = lauxh_checkstring( L, 2 );
 
-     if( tls_config_set_key_file( cfg->ctx, file ) ){
-         lua_pushboolean( L, 0 );
-         lua_pushstring( L, strerror( errno ) );
-         return 2;
-     }
+    if( tls_config_set_key_file( cfg->ctx, file ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-     lua_pushboolean( L, 1 );
+    lua_pushboolean( L, 1 );
 
-     return 1;
+    return 1;
 }
 
 
 static int set_ecdhecurve_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     const char *name = lauxh_checkstring( L, 2 );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *name = lauxh_checkstring( L, 2 );
 
-     if( tls_config_set_ecdhecurve( cfg->ctx, name ) ){
-         lua_pushboolean( L, 0 );
-         lua_pushstring( L, strerror( errno ) );
-         return 2;
-     }
+    if( tls_config_set_ecdhecurve( cfg->ctx, name ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-     lua_pushboolean( L, 1 );
+    lua_pushboolean( L, 1 );
 
-     return 1;
+    return 1;
 }
 
 
 static int set_dheparams_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     const char *params = lauxh_checkstring( L, 2 );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *params = lauxh_checkstring( L, 2 );
 
-     if( tls_config_set_dheparams( cfg->ctx, params ) ){
-         lua_pushboolean( L, 0 );
-         lua_pushstring( L, strerror( errno ) );
-         return 2;
-     }
+    if( tls_config_set_dheparams( cfg->ctx, params ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-     lua_pushboolean( L, 1 );
+    lua_pushboolean( L, 1 );
 
-     return 1;
+    return 1;
 }
 
 
 static int set_ciphers_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     const char *ciphers = lauxh_checkstring( L, 2 );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *ciphers = lauxh_checkstring( L, 2 );
 
-     if( tls_config_set_ciphers( cfg->ctx, ciphers ) ){
-         lua_pushboolean( L, 0 );
-         lua_pushstring( L, strerror( errno ) );
-         return 2;
-     }
+    if( tls_config_set_ciphers( cfg->ctx, ciphers ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-     lua_pushboolean( L, 1 );
+    lua_pushboolean( L, 1 );
 
-     return 1;
+    return 1;
 }
 
 
 static int set_cert_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     size_t len = 0;
-     const uint8_t *cert = (const uint8_t*)lauxh_checklstring( L, 2, &len );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    size_t len = 0;
+    const uint8_t *cert = (const uint8_t*)lauxh_checklstring( L, 2, &len );
 
-     if( tls_config_set_cert_mem( cfg->ctx, cert, len ) ){
-         lua_pushboolean( L, 0 );
-         lua_pushstring( L, strerror( errno ) );
-         return 2;
-     }
+    if( tls_config_set_cert_mem( cfg->ctx, cert, len ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-     lua_pushboolean( L, 1 );
+    lua_pushboolean( L, 1 );
 
-     return 1;
+    return 1;
 }
 
 
 static int set_cert_file_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     const char *file = lauxh_checkstring( L, 2 );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *file = lauxh_checkstring( L, 2 );
 
-     if( tls_config_set_cert_file( cfg->ctx, file ) ){
-         lua_pushboolean( L, 0 );
-         lua_pushstring( L, strerror( errno ) );
-         return 2;
-     }
+    if( tls_config_set_cert_file( cfg->ctx, file ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-     lua_pushboolean( L, 1 );
+    lua_pushboolean( L, 1 );
 
-     return 1;
+    return 1;
 }
 
 
 static int set_ca_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     size_t len = 0;
-     const uint8_t *ca = (const uint8_t*)lauxh_checklstring( L, 2, &len );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    size_t len = 0;
+    const uint8_t *ca = (const uint8_t*)lauxh_checklstring( L, 2, &len );
 
-     if( tls_config_set_ca_mem( cfg->ctx, ca, len ) ){
-         lua_pushboolean( L, 0 );
-         lua_pushstring( L, strerror( errno ) );
-         return 2;
-     }
+    if( tls_config_set_ca_mem( cfg->ctx, ca, len ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-     lua_pushboolean( L, 1 );
+    lua_pushboolean( L, 1 );
 
-     return 1;
+    return 1;
 }
 
 
 static int set_ca_path_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     const char *path = lauxh_checkstring( L, 2 );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *path = lauxh_checkstring( L, 2 );
 
-     if( tls_config_set_ca_path( cfg->ctx, path ) ){
-         lua_pushboolean( L, 0 );
-         lua_pushstring( L, strerror( errno ) );
-         return 2;
-     }
+    if( tls_config_set_ca_path( cfg->ctx, path ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-     lua_pushboolean( L, 1 );
+    lua_pushboolean( L, 1 );
 
-     return 1;
+    return 1;
 }
 
 
 static int set_ca_file_lua( lua_State *L )
 {
-     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-     const char *file = lauxh_checkstring( L, 2 );
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *file = lauxh_checkstring( L, 2 );
 
-     if( tls_config_set_ca_file( cfg->ctx, file ) ){
-         lua_pushboolean( L, 0 );
-         lua_pushstring( L, strerror( errno ) );
-         return 2;
-     }
+    if( tls_config_set_ca_file( cfg->ctx, file ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-     lua_pushboolean( L, 1 );
+    lua_pushboolean( L, 1 );
 
-     return 1;
+    return 1;
 }
 
 
