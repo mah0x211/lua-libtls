@@ -363,6 +363,42 @@ static int set_ca_file_lua( lua_State *L )
 }
 
 
+static int add_keypair_lua( lua_State *L )
+{
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    size_t clen = 0;
+    const uint8_t *cert = (const uint8_t*)lauxh_checklstring( L, 2, &clen );
+    size_t klen = 0;
+    const uint8_t *key = (const uint8_t*)lauxh_checklstring( L, 3, &klen );
+
+    if( lua_gettop( L ) < 4 )
+    {
+        if( tls_config_add_keypair_mem( cfg->ctx, cert, clen, key, klen ) ){
+            lua_pushboolean( L, 0 );
+            lua_pushstring( L, strerror( errno ) );
+            return 2;
+        }
+    }
+    // with ocsp
+    else
+    {
+        size_t olen = 0;
+        const uint8_t *ocsp = (const uint8_t*)lauxh_checklstring( L, 4, &olen );
+
+        if( tls_config_add_keypair_ocsp_mem( cfg->ctx, cert, clen, key, klen,
+                                            ocsp, olen ) ){
+            lua_pushboolean( L, 0 );
+            lua_pushstring( L, strerror( errno ) );
+            return 2;
+        }
+    }
+
+    lua_pushboolean( L, 1 );
+
+    return 1;
+}
+
+
 static int add_keypair_file_lua( lua_State *L )
 {
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
@@ -456,6 +492,7 @@ LUALIB_API int luaopen_libtls_config( lua_State *L )
     };
     struct luaL_Reg method[] = {
         { "add_keypair_file", add_keypair_file_lua },
+        { "add_keypair", add_keypair_lua },
 
         { "set_ca_file", set_ca_file_lua },
         { "set_ca_path", set_ca_path_lua },
