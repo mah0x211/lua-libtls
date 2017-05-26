@@ -27,6 +27,34 @@
 #include "libtls.h"
 
 
+static int conn_version_lua( lua_State *L )
+{
+    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    const char *ver = tls_conn_version( tls->ctx );
+
+    if( ver ){
+        lua_pushstring( L, ver );
+        return 1;
+    }
+
+    return 0;
+}
+
+
+static int conn_servername_lua( lua_State *L )
+{
+    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    const char *name = tls_conn_servername( tls->ctx );
+
+    if( name ){
+        lua_pushstring( L, name );
+        return 1;
+    }
+
+    return 0;
+}
+
+
 static int conn_cipher_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
@@ -48,20 +76,6 @@ static int conn_alpn_selected_lua( lua_State *L )
 
     if( alpn ){
         lua_pushstring( L, alpn );
-        return 1;
-    }
-
-    return 0;
-}
-
-
-static int conn_version_lua( lua_State *L )
-{
-    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
-    const char *ver = tls_conn_version( tls->ctx );
-
-    if( ver ){
-        lua_pushstring( L, ver );
         return 1;
     }
 
@@ -460,9 +474,10 @@ LUALIB_API int luaopen_libtls( lua_State *L )
         { "peer_cert_subject", peer_cert_subject_lua },
         { "peer_cert_notbefore", peer_cert_notbefore_lua },
         { "peer_cert_notafter", peer_cert_notafter_lua },
-        { "conn_version", conn_version_lua },
         { "conn_alpn_selected", conn_alpn_selected_lua },
         { "conn_cipher", conn_cipher_lua },
+        { "conn_servername", conn_servername_lua },
+        { "conn_version", conn_version_lua },
         { NULL, NULL }
     };
     struct luaL_Reg funcs[] = {
