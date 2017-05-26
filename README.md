@@ -340,7 +340,7 @@ loads a certificate or key from disk into memory to be loaded with `config:set_c
 **Params**
 
 - `file:string`: filename of certificate or key file.
-- `err:string`: error message.
+- `password:string`: password for key file.
 
 
 **Returns**
