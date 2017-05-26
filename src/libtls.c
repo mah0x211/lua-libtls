@@ -27,6 +27,21 @@
 #include "libtls.h"
 
 
+static inline int tls_error_lua( lua_State *L, ltls_t *tls )
+{
+    const char *errstr = tls_error( tls->ctx );
+
+    lua_pushboolean( L, 0 );
+    if( errstr ){
+        lua_pushstring( L, errstr );
+    }
+    else {
+        lua_pushstring( L, strerror( errno ) );
+    }
+    return 2;
+}
+
+
 static int conn_version_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
@@ -171,9 +186,7 @@ static int close_lua( lua_State *L )
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
 
     if( tls_close( tls->ctx ) ){
-        lua_pushboolean( L, 0 );
-        lua_pushstring( L, tls_error( tls->ctx ) );
-        return 2;
+        return tls_error_lua( L, tls );
     }
 
     lua_pushboolean( L, 1 );
@@ -196,9 +209,7 @@ static int write_lua( lua_State *L )
 
         // got error
         case -1:
-            lua_pushinteger( L, 0 );
-            lua_pushstring( L, tls_error( tls->ctx ) );
-            return 2;
+            return tls_error_lua( L, tls );
 
         // again
         case TLS_WANT_POLLIN:
@@ -238,9 +249,7 @@ static int read_lua( lua_State *L )
 
         // got error
         case -1:
-            lua_pushnil( L );
-            lua_pushstring( L, tls_error( tls->ctx ) );
-            rv = 2;
+            rv = tls_error_lua( L, tls );
         break;
 
         // again
@@ -268,9 +277,7 @@ static int handshake_lua( lua_State *L )
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
 
     if( tls_handshake( tls->ctx ) ){
-        lua_pushboolean( L, 0 );
-        lua_pushstring( L, tls_error( tls->ctx ) );
-        return 2;
+        return tls_error_lua( L, tls );
     }
 
     lua_pushboolean( L, 1 );
