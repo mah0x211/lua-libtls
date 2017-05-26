@@ -72,8 +72,8 @@ creates a new client context suitable for reading and writing on an existing pai
 
 **Params**
 
-- `fdr:number`:  fd for read.
-- `fdw:number`:  fd for write.
+- `fdr:number`: fd for read.
+- `fdw:number`: fd for write.
 
 **Returns**
 
@@ -87,7 +87,7 @@ creates a new context suitable for reading and writing on an already established
 
 **Params**
 
-- `fd:number`:  already established socket descriptor.
+- `fd:number`: already established socket descriptor.
 
 **Returns**
 
@@ -106,8 +106,8 @@ If port is nil then a host of the format "hostname:port" is permitted.
 
 **Params**
 
-- `host:string`:  hostname.
-- `port:string`:  port number or service name.
+- `host:string`: hostname.
+- `port:string`: port number or service name.
 
 **Returns**
 
@@ -121,8 +121,8 @@ connects a client context to a pair of existing file descriptors.
 
 **Params**
 
-- `fdr:number`:  fd for read.
-- `fdw:number`:  fd for write.
+- `fdr:number`: fd for read.
+- `fdw:number`: fd for write.
 - `servername:string`:  server name.
 
 **Returns**
@@ -137,9 +137,9 @@ the same behaviour as a ctxconnect. however the name to use for verification is 
 
 **Params**
 
-- `host:string`:  hostname.
-- `port:string`:  port number or service name.
-- `servername:string`:  server name.
+- `host:string`: hostname.
+- `port:string`: port number or service name.
+- `servername:string`: server name.
 
 **Returns**
 
@@ -153,8 +153,8 @@ connects a client context to an already established socket connection.
 
 **Params**
 
-- `fd:number`:  already established socket descriptor.
-- `servername:string`:  server name.
+- `fd:number`: already established socket descriptor.
+- `servername:string`: server name.
 
 **Returns**
 
@@ -168,7 +168,7 @@ reads bufsize bytes of data from the socket.
 
 **Params**
 
-- `bufsize:number`:  working buffer size of receive operation. (default: `BUFSIZ` that size of `stdio.h` buffers)
+- `bufsize:number`: working buffer size of receive operation. (default: `BUFSIZ` that size of `stdio.h` buffers)
 
 **Returns**
 
@@ -185,7 +185,7 @@ writes message to the socket.
 
 **Params**
 
-- `msg:string`:  message string/
+- `msg:string`: message string/
 
 **Returns**
 
@@ -370,7 +370,7 @@ sets the filename used to load a file containing the root certificates.
 
 **Params**
 
-- `file:string`:  filename of ca file.
+- `file:string`: filename of ca file.
 
 **Returns**
 
@@ -384,7 +384,7 @@ sets the path (directory) which should be searched for root certificates.
 
 **Params**
 
-- `path:string`:  pathname of ca file.
+- `path:string`: pathname of ca file.
 
 **Returns**
 
@@ -398,7 +398,7 @@ sets the root certificates directly from memory.
 
 **Params**
 
-- `ca:string`:  ca data.
+- `ca:string`: ca data.
 
 **Returns**
 
@@ -412,7 +412,7 @@ sets file from which the public certificate will be read.
 
 **Params**
 
-- `file:string`:  filename of cert file.
+- `file:string`: filename of cert file.
 
 **Returns**
 
@@ -426,7 +426,7 @@ sets the public certificate directly from memory.
 
 **Params**
 
-- `cert:string`:  cert data.
+- `cert:string`: cert data.
 
 **Returns**
 
@@ -440,7 +440,7 @@ sets the list of ciphers that may be used.
 
 **Params**
 
-- `ciphers:string`:  following cipher names.
+- `ciphers:string`: following cipher names.
 	- `secure`
 	- `default` (an alias for secure)
 	- `legacy`
@@ -458,7 +458,7 @@ sets the file from which the private key will be read.
 
 **Params**
 
-- `file:string`:  filename of key file.
+- `file:string`: filename of key file.
 
 **Returns**
 
@@ -472,7 +472,7 @@ directly sets the private key from memory.
 
 **Params**
 
-- `key:string`:  key data.
+- `key:string`: key data.
 
 **Returns**
 
@@ -486,8 +486,8 @@ sets the files from which the public certificate and private key will be read.
 
 **Params**
 
-- `certfile:string`:  filename of cert file.
-- `keyfile:string`:  filename of key file.
+- `certfile:string`: filename of cert file.
+- `keyfile:string`: filename of key file.
 
 **Returns**
 
@@ -497,12 +497,12 @@ sets the files from which the public certificate and private key will be read.
 
 ### ok, err = cfg:set_keypair( cert, key )
 
-directly sets the public certificate and private key from memory. (Client and server
+directly sets the public certificate and private key from memory.
 
 **Params**
 
-- `cert:string`:  cert data.
-- `key:string`:  key data.
+- `cert:string`: cert data.
+- `key:string`: key data.
 
 **Returns**
 
