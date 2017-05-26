@@ -123,9 +123,15 @@ static int set_verify_depth_lua( lua_State *L )
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
     int depth = lauxh_checkinteger( L, 2 );
 
-    tls_config_set_verify_depth( cfg->ctx, depth );
+    if( tls_config_set_verify_depth( cfg->ctx, depth ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
 
-    return 0;
+    lua_pushboolean( L, 1 );
+
+    return 1;
 }
 
 
