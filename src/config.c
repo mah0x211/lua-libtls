@@ -174,6 +174,21 @@ static int set_protocols_lua( lua_State *L )
 }
 
 
+static int set_ocsp_staple_file_lua( lua_State *L )
+{
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *file = lauxh_checkstring( L, 2 );
+
+    if( tls_config_set_ocsp_staple_file( cfg->ctx, file ) ){
+        return config_error_lua( L, cfg );
+    }
+
+    lua_pushboolean( L, 1 );
+
+    return 1;
+}
+
+
 static int set_ocsp_staple_lua( lua_State *L )
 {
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
@@ -561,6 +576,7 @@ LUALIB_API int luaopen_libtls_config( lua_State *L )
         { "set_keypair", set_keypair_lua },
 
         { "set_ocsp_staple", set_ocsp_staple_lua },
+        { "set_ocsp_staple_file", set_ocsp_staple_file_lua },
 
         { "set_protocols", set_protocols_lua },
         { "set_verify_depth", set_verify_depth_lua },
