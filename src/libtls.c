@@ -544,5 +544,14 @@ LUALIB_API int luaopen_libtls( lua_State *L )
     lauxh_pushint2tbl( L, "TLS_v12", TLS_PROTOCOL_TLSv1_2 );
     lauxh_pushint2tbl( L, "TLS_v1x", TLS_PROTOCOL_TLSv1 );
 
+    // RFC 6960 Section 2.3
+    // add TLS_OCSP_RESPONSE_* constants
+    lauxh_pushint2tbl( L, "OCSP_RESPONSE_SUCCESSFUL", TLS_OCSP_RESPONSE_SUCCESSFUL );
+    lauxh_pushint2tbl( L, "OCSP_RESPONSE_MALFORMED", TLS_OCSP_RESPONSE_MALFORMED );
+    lauxh_pushint2tbl( L, "OCSP_RESPONSE_INTERNALERROR", TLS_OCSP_RESPONSE_INTERNALERROR );
+    lauxh_pushint2tbl( L, "OCSP_RESPONSE_TRYLATER", TLS_OCSP_RESPONSE_TRYLATER );
+    lauxh_pushint2tbl( L, "OCSP_RESPONSE_SIGREQUIRED", TLS_OCSP_RESPONSE_SIGREQUIRED );
+    lauxh_pushint2tbl( L, "OCSP_RESPONSE_UNAUTHORIZED", TLS_OCSP_RESPONSE_UNAUTHORIZED );
+
     return 1;
 }
