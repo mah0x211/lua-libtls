@@ -198,8 +198,20 @@ static int set_keypair_file_lua( lua_State *L )
     const char *cert = lauxh_checkstring( L, 2 );
     const char *key = lauxh_checkstring( L, 3 );
 
-    if( tls_config_set_keypair_file( cfg->ctx, cert, key ) ){
-        return config_error_lua( L, cfg );
+    if( lua_gettop( L ) < 4 )
+    {
+        if( tls_config_set_keypair_file( cfg->ctx, cert, key ) ){
+            return config_error_lua( L, cfg );
+        }
+    }
+    // with ocsp file
+    else
+    {
+        const char *ocsp = lauxh_checkstring( L, 4 );
+
+        if( tls_config_set_keypair_ocsp_file( cfg->ctx, cert, key, ocsp ) ){
+            return config_error_lua( L, cfg );
+        }
     }
 
     lua_pushboolean( L, 1 );
