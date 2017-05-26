@@ -43,6 +43,21 @@ static inline int config_error_lua( lua_State *L, ltls_config_t *cfg )
 }
 
 
+static int set_session_lifetime_lua( lua_State *L )
+{
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    lua_Integer lifetime = lauxh_checkinteger( L, 2 );
+
+    if( tls_config_set_session_lifetime( cfg->ctx, (int)lifetime ) ){
+        return config_error_lua( L, cfg );
+    }
+
+    lua_pushboolean( L, 1 );
+
+    return 1;
+}
+
+
 static int set_session_id_lua( lua_State *L )
 {
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
@@ -621,6 +636,7 @@ LUALIB_API int luaopen_libtls_config( lua_State *L )
         { "clear_keys", clear_keys_lua },
 
         { "set_session_id", set_session_id_lua },
+        { "set_session_lifetime", set_session_lifetime_lua },
         { NULL, NULL }
     };
     struct luaL_Reg funcs[] = {
