@@ -363,6 +363,23 @@ static int set_ca_file_lua( lua_State *L )
 }
 
 
+static int set_alpn_lua( lua_State *L )
+{
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *alpn = lauxh_checkstring( L, 2 );
+
+    if( tls_config_set_alpn( cfg->ctx, alpn ) ){
+        lua_pushboolean( L, 0 );
+        lua_pushstring( L, strerror( errno ) );
+        return 2;
+    }
+
+    lua_pushboolean( L, 1 );
+
+    return 1;
+}
+
+
 static int add_keypair_lua( lua_State *L )
 {
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
@@ -493,6 +510,8 @@ LUALIB_API int luaopen_libtls_config( lua_State *L )
     struct luaL_Reg method[] = {
         { "add_keypair_file", add_keypair_file_lua },
         { "add_keypair", add_keypair_lua },
+
+        { "set_alpn", set_alpn_lua },
 
         { "set_ca_file", set_ca_file_lua },
         { "set_ca_path", set_ca_path_lua },
