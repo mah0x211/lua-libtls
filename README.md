@@ -78,7 +78,7 @@ creates a new client context suitable for reading and writing on an existing pai
 **Returns**
 
 - `client:libtls`: TLS context for client connection.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### client, err = ctx:accept_socket( fd )
@@ -92,7 +92,7 @@ creates a new context suitable for reading and writing on an already established
 **Returns**
 
 - `client:libtls`: TLS context for client connection.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 
@@ -112,7 +112,7 @@ If port is nil then a host of the format "hostname:port" is permitted.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = ctx:connect_fds( fdr, fdw [, servername] )
@@ -128,7 +128,7 @@ connects a client context to a pair of existing file descriptors.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = ctx:connect_servername( host [, port [, servername]] )
@@ -144,7 +144,7 @@ the same behaviour as a ctxconnect. however the name to use for verification is 
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = ctx:connect_socket( fd [, servername] )
@@ -159,7 +159,7 @@ connects a client context to an already established socket connection.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### len, err, again = ctx:read( [bufsize] )
@@ -208,7 +208,7 @@ Only the TLS layer will be shut down and the caller is responsible for closing t
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = ctx:handshake()
@@ -219,7 +219,7 @@ It is only necessary to call this function if you need to guarantee that the han
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok = ctx:peer_cert_provided()
@@ -358,7 +358,7 @@ allocates a new default configuration object
 **Returns**
 
 - `cfg:libtls.config`: a configuration object.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ## Common configuration methods of client and server
@@ -375,7 +375,7 @@ sets the filename used to load a file containing the root certificates.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = cfg:set_ca_path( path )
@@ -389,7 +389,7 @@ sets the path (directory) which should be searched for root certificates.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = cfg:set_ca( ca )
@@ -403,7 +403,7 @@ sets the root certificates directly from memory.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = cfg:set_cert_file( file )
@@ -417,7 +417,7 @@ sets file from which the public certificate will be read.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = cfg:set_cert( cert )
@@ -431,7 +431,7 @@ sets the public certificate directly from memory.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = cfg:set_ciphers( ciphers )
@@ -449,7 +449,7 @@ sets the list of ciphers that may be used.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = cfg:set_key_file( file )
@@ -463,7 +463,7 @@ sets the file from which the private key will be read.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = cfg:set_key( key )
@@ -477,7 +477,7 @@ directly sets the private key from memory.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = cfg:set_keypair_file( certfile, keyfile )
@@ -492,7 +492,7 @@ sets the files from which the public certificate and private key will be read.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = cfg:set_keypair( cert, key )
@@ -507,7 +507,7 @@ directly sets the public certificate and private key from memory.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 
@@ -522,7 +522,7 @@ sets which versions of the protocol may be used.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### cfg:insecure_noverifycert()
@@ -573,7 +573,7 @@ Tune the dheparams.
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ### ok, err = cfg:set_ecdhecurve( name )
@@ -593,7 +593,7 @@ $ openssl ecparam -list_curves
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
 
 ## Configuration methods for client
@@ -620,5 +620,5 @@ sets the maximum depth for the certificate chain verification that shall be allo
 **Returns**
 
 - `ok:boolean`: true on success.
-- `err:string`: error message
+- `err:string`: error message.
 
