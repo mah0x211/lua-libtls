@@ -41,6 +41,27 @@ static inline int tls_error_lua( lua_State *L, ltls_t *tls )
     return 2;
 }
 
+static inline int peer_ocsp_timeof_lua( lua_State *L, time_t (*fn)(struct tls*) )
+{
+    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    time_t epoch = fn( tls->ctx );
+
+    if( epoch == -1 ){
+        return tls_error_lua( L, tls );
+    }
+
+    lua_pushinteger( L, (lua_Integer)epoch );
+
+    return 1;
+}
+
+
+static int peer_ocsp_next_update_lua( lua_State *L )
+{
+    return peer_ocsp_timeof_lua( L, tls_peer_ocsp_next_update );
+}
+
+
 static int peer_ocsp_crl_reason_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
@@ -523,6 +544,7 @@ LUALIB_API int luaopen_libtls( lua_State *L )
         { "ocsp_process_response", ocsp_process_response_lua },
         { "peer_ocsp_cert_status", peer_ocsp_cert_status_lua },
         { "peer_ocsp_crl_reason", peer_ocsp_crl_reason_lua },
+        { "peer_ocsp_next_update", peer_ocsp_next_update_lua },
         { NULL, NULL }
     };
     struct luaL_Reg funcs[] = {
