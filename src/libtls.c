@@ -55,6 +55,10 @@ static inline int peer_ocsp_timeof_lua( lua_State *L, time_t (*fn)(struct tls*) 
     return 1;
 }
 
+static int peer_ocsp_this_update_lua( lua_State *L )
+{
+    return peer_ocsp_timeof_lua( L, tls_peer_ocsp_this_update );
+}
 
 static int peer_ocsp_revocation_time_lua( lua_State *L )
 {
@@ -551,6 +555,7 @@ LUALIB_API int luaopen_libtls( lua_State *L )
         { "peer_ocsp_crl_reason", peer_ocsp_crl_reason_lua },
         { "peer_ocsp_next_update", peer_ocsp_next_update_lua },
         { "peer_ocsp_revocation_time", peer_ocsp_revocation_time_lua },
+        { "peer_ocsp_this_update", peer_ocsp_this_update_lua },
         { NULL, NULL }
     };
     struct luaL_Reg funcs[] = {
