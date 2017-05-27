@@ -556,12 +556,41 @@ LUALIB_API int luaopen_libtls( lua_State *L )
 
     // RFC 6960 Section 2.3
     // add TLS_OCSP_RESPONSE_* constants
-    lauxh_pushint2tbl( L, "OCSP_RESPONSE_SUCCESSFUL", TLS_OCSP_RESPONSE_SUCCESSFUL );
-    lauxh_pushint2tbl( L, "OCSP_RESPONSE_MALFORMED", TLS_OCSP_RESPONSE_MALFORMED );
-    lauxh_pushint2tbl( L, "OCSP_RESPONSE_INTERNALERROR", TLS_OCSP_RESPONSE_INTERNALERROR );
-    lauxh_pushint2tbl( L, "OCSP_RESPONSE_TRYLATER", TLS_OCSP_RESPONSE_TRYLATER );
-    lauxh_pushint2tbl( L, "OCSP_RESPONSE_SIGREQUIRED", TLS_OCSP_RESPONSE_SIGREQUIRED );
-    lauxh_pushint2tbl( L, "OCSP_RESPONSE_UNAUTHORIZED", TLS_OCSP_RESPONSE_UNAUTHORIZED );
+    lauxh_pushint2tbl( L, "OCSP_RESPONSE_SUCCESSFUL",
+                       TLS_OCSP_RESPONSE_SUCCESSFUL );
+    lauxh_pushint2tbl( L, "OCSP_RESPONSE_MALFORMED",
+                       TLS_OCSP_RESPONSE_MALFORMED );
+    lauxh_pushint2tbl( L, "OCSP_RESPONSE_INTERNALERROR",
+                       TLS_OCSP_RESPONSE_INTERNALERROR );
+    lauxh_pushint2tbl( L, "OCSP_RESPONSE_TRYLATER",
+                       TLS_OCSP_RESPONSE_TRYLATER );
+    lauxh_pushint2tbl( L, "OCSP_RESPONSE_SIGREQUIRED",
+                       TLS_OCSP_RESPONSE_SIGREQUIRED );
+    lauxh_pushint2tbl( L, "OCSP_RESPONSE_UNAUTHORIZED",
+                       TLS_OCSP_RESPONSE_UNAUTHORIZED );
+
+    // RFC 5280 Section 5.3.1
+    // add TLS_CRL_REASON_* constants
+    lauxh_pushint2tbl( L, "CRL_REASON_UNSPECIFIED",
+                       TLS_CRL_REASON_UNSPECIFIED );
+    lauxh_pushint2tbl( L, "CRL_REASON_KEY_COMPROMISE",
+                       TLS_CRL_REASON_KEY_COMPROMISE );
+    lauxh_pushint2tbl( L, "CRL_REASON_CA_COMPROMISE",
+                       TLS_CRL_REASON_CA_COMPROMISE );
+    lauxh_pushint2tbl( L, "CRL_REASON_AFFILIATION_CHANGED",
+                       TLS_CRL_REASON_AFFILIATION_CHANGED );
+    lauxh_pushint2tbl( L, "CRL_REASON_SUPERSEDED",
+                       TLS_CRL_REASON_SUPERSEDED );
+    lauxh_pushint2tbl( L, "CRL_REASON_CESSATION_OF_OPERATION",
+                       TLS_CRL_REASON_CESSATION_OF_OPERATION );
+    lauxh_pushint2tbl( L, "CRL_REASON_CERTIFICATE_HOLD",
+                       TLS_CRL_REASON_CERTIFICATE_HOLD );
+    lauxh_pushint2tbl( L, "CRL_REASON_REMOVE_FROM_CRL",
+                       TLS_CRL_REASON_REMOVE_FROM_CRL );
+    lauxh_pushint2tbl( L, "CRL_REASON_PRIVILEGE_WITHDRAWN",
+                       TLS_CRL_REASON_PRIVILEGE_WITHDRAWN );
+    lauxh_pushint2tbl( L, "CRL_REASON_AA_COMPROMISE",
+                       TLS_CRL_REASON_AA_COMPROMISE );
 
     return 1;
 }
