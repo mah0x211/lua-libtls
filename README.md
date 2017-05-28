@@ -600,10 +600,11 @@ sets the list of ciphers that may be used.
 **Params**
 
 - `ciphers:string`: following cipher names.
-	- `secure`
-	- `default` (an alias for secure)
-	- `legacy`
-	- `compat` (an alias for legacy)
+  - `secure`
+  - `default` (an alias for secure)
+  - `legacy`
+  - `compat` (an alias for legacy)
+  - `insecure` (an alias for all)
 
 **Returns**
 
@@ -789,7 +790,10 @@ Tune the dheparams.
 
 **Params**
 
-- `params:string`: "none", "auto" or "legacy".
+- `params:string`: following strings.
+  - `none`
+  - `auto`
+  - `legacy`
 
 **Returns**
 
