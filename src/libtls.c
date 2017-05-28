@@ -265,7 +265,7 @@ static int write_lua( lua_State *L )
 
         // got error
         case -1:
-            return tls_error_lua( L, tls, lua_pushboolean, 0 );
+            return tls_error_lua( L, tls, lua_pushnil );
 
         // again
         case TLS_WANT_POLLIN:
