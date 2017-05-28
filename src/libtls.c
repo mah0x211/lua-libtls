@@ -61,6 +61,22 @@ static int peer_ocsp_revocation_time_lua( lua_State *L )
     peer_ocsp_fn_result_lua( L, tls_peer_ocsp_revocation_time );
 }
 
+
+static int peer_ocsp_result_lua( lua_State *L )
+{
+    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    const char *res = tls_peer_ocsp_result( tls->ctx );
+
+    if( !res ){
+        return tls_error_lua( L, tls, lua_pushnil );
+    }
+
+    lua_pushstring( L, res );
+
+    return 1;
+}
+
+
 static int peer_ocsp_response_status_lua( lua_State *L )
 {
     peer_ocsp_fn_result_lua( L, tls_peer_ocsp_response_status );
@@ -534,6 +550,7 @@ LUALIB_API int luaopen_libtls( lua_State *L )
         { "peer_ocsp_crl_reason", peer_ocsp_crl_reason_lua },
         { "peer_ocsp_next_update", peer_ocsp_next_update_lua },
         { "peer_ocsp_response_status", peer_ocsp_response_status_lua },
+        { "peer_ocsp_result", peer_ocsp_result_lua },
         { "peer_ocsp_revocation_time", peer_ocsp_revocation_time_lua },
         { "peer_ocsp_this_update", peer_ocsp_this_update_lua },
         { NULL, NULL }
