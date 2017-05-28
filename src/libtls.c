@@ -41,53 +41,49 @@ static inline int tls_error_lua( lua_State *L, ltls_t *tls )
     return 2;
 }
 
-static inline int peer_ocsp_timeof_lua( lua_State *L, time_t (*fn)(struct tls*) )
-{
-    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
-    time_t epoch = fn( tls->ctx );
 
-    if( epoch == -1 ){
-        return tls_error_lua( L, tls );
-    }
+#define peer_ocsp_fn_result_lua( L, fn ) do{            \
+    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );  \
+    lua_Integer num = fn( tls->ctx );                   \
+    if( num == -1 ){                                    \
+        const char *errstr = tls_error( tls->ctx );     \
+        lua_pushnil( L );                               \
+        if( errstr ){                                   \
+            lua_pushstring( L, errstr );                \
+        }                                               \
+        else {                                          \
+            lua_pushstring( L, strerror( errno ) );     \
+        }                                               \
+        return 2;                                       \
+    }                                                   \
+    lua_pushinteger( L, num );                          \
+    return 1;                                           \
+}while(0)
 
-    lua_pushinteger( L, (lua_Integer)epoch );
-
-    return 1;
-}
 
 static int peer_ocsp_this_update_lua( lua_State *L )
 {
-    return peer_ocsp_timeof_lua( L, tls_peer_ocsp_this_update );
+    peer_ocsp_fn_result_lua( L, tls_peer_ocsp_this_update );
 }
 
 static int peer_ocsp_revocation_time_lua( lua_State *L )
 {
-    return peer_ocsp_timeof_lua( L, tls_peer_ocsp_revocation_time );
+    peer_ocsp_fn_result_lua( L, tls_peer_ocsp_revocation_time );
 }
 
 static int peer_ocsp_next_update_lua( lua_State *L )
 {
-    return peer_ocsp_timeof_lua( L, tls_peer_ocsp_next_update );
+    peer_ocsp_fn_result_lua( L, tls_peer_ocsp_next_update );
 }
-
 
 static int peer_ocsp_crl_reason_lua( lua_State *L )
 {
-    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
-
-    lua_pushinteger( L, tls_peer_ocsp_crl_reason( tls->ctx ) );
-
-    return 1;
+    peer_ocsp_fn_result_lua( L, tls_peer_ocsp_crl_reason );
 }
-
 
 static int peer_ocsp_cert_status_lua( lua_State *L )
 {
-    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
-
-    lua_pushinteger( L, tls_peer_ocsp_cert_status( tls->ctx ) );
-
-    return 1;
+    peer_ocsp_fn_result_lua( L, tls_peer_ocsp_cert_status );
 }
 
 
