@@ -305,7 +305,7 @@ static int read_lua( lua_State *L )
 
         // got error
         case -1:
-            rv = tls_error_lua( L, tls, lua_pushboolean, 0 );
+            rv = tls_error_lua( L, tls, lua_pushnil );
         break;
 
         // again
