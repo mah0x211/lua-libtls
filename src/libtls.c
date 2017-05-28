@@ -51,10 +51,27 @@
 }while(0)
 
 
+
+static int peer_ocsp_url_lua( lua_State *L )
+{
+    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    const char *url = tls_peer_ocsp_url( tls->ctx );
+
+    if( !url ){
+        return tls_error_lua( L, tls, lua_pushnil );
+    }
+
+    lua_pushstring( L, url );
+
+    return 1;
+}
+
+
 static int peer_ocsp_this_update_lua( lua_State *L )
 {
     peer_ocsp_fn_result_lua( L, tls_peer_ocsp_this_update );
 }
+
 
 static int peer_ocsp_revocation_time_lua( lua_State *L )
 {
@@ -82,15 +99,18 @@ static int peer_ocsp_response_status_lua( lua_State *L )
     peer_ocsp_fn_result_lua( L, tls_peer_ocsp_response_status );
 }
 
+
 static int peer_ocsp_next_update_lua( lua_State *L )
 {
     peer_ocsp_fn_result_lua( L, tls_peer_ocsp_next_update );
 }
 
+
 static int peer_ocsp_crl_reason_lua( lua_State *L )
 {
     peer_ocsp_fn_result_lua( L, tls_peer_ocsp_crl_reason );
 }
+
 
 static int peer_ocsp_cert_status_lua( lua_State *L )
 {
@@ -553,6 +573,7 @@ LUALIB_API int luaopen_libtls( lua_State *L )
         { "peer_ocsp_result", peer_ocsp_result_lua },
         { "peer_ocsp_revocation_time", peer_ocsp_revocation_time_lua },
         { "peer_ocsp_this_update", peer_ocsp_this_update_lua },
+        { "peer_ocsp_url", peer_ocsp_url_lua },
         { NULL, NULL }
     };
     struct luaL_Reg funcs[] = {
