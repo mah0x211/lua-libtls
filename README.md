@@ -34,6 +34,37 @@ local tls = require('libtls')
 - `TLS_v1x`: TLS version 1.0, TLS version 1.1 and TLS version 1.2
 
 
+### OCSP certificate status code
+
+- `OCSP_CERT_GOOD`
+- `OCSP_CERT_REVOKED`
+- `OCSP_CERT_UNKNOWN`
+
+
+### OCSP response status code
+
+- `OCSP_RESPONSE_SUCCESSFUL`
+- `OCSP_RESPONSE_MALFORMED`
+- `OCSP_RESPONSE_INTERNALERROR`
+- `OCSP_RESPONSE_TRYLATER`
+- `OCSP_RESPONSE_SIGREQUIRED`
+- `OCSP_RESPONSE_UNAUTHORIZED`
+
+
+### CTL reason status code
+
+- `CRL_REASON_UNSPECIFIED`
+- `CRL_REASON_KEY_COMPROMISE`
+- `CRL_REASON_CA_COMPROMISE`
+- `CRL_REASON_AFFILIATION_CHANGED`
+- `CRL_REASON_SUPERSEDED`
+- `CRL_REASON_CESSATION_OF_OPERATION`
+- `CRL_REASON_CERTIFICATE_HOLD`
+- `CRL_REASON_REMOVE_FROM_CRL`
+- `CRL_REASON_PRIVILEGE_WITHDRAWN`
+- `CRL_REASON_AA_COMPROMISE`
+
+
 ## Creating a TLS context
 
 ### ctx, err = tls.client( cfg )
@@ -93,6 +124,15 @@ creates a new context suitable for reading and writing on an already established
 
 - `client:libtls`: TLS context for client connection.
 - `err:string`: error message.
+
+
+### name = ctx:conn_servername()
+
+returns a string corresponding to the servername that the client connected to ctx requested by sending a TLS Server Name Indication extension.
+
+**Returns**
+
+- `name:string`: servername strings.
 
 
 
@@ -185,7 +225,7 @@ writes message to the socket.
 
 **Params**
 
-- `msg:string`: message string/
+- `msg:string`: message string.
 
 **Returns**
 
@@ -195,6 +235,101 @@ writes message to the socket.
 
 
 **NOTE:** all return values will be nil if closed by peer.
+
+
+### ok, err = ctx:ocsp_process_response( res )
+
+processes a raw OCSP response in response of size size to check the revocation status of the peer certificate from ctx. A successful return true indicates that the certificate has not been revoked.
+
+**Params**
+
+- `res:string`: response string.
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error string.
+
+
+### status, err = ctx:peer_ocsp_cert_status()
+
+returns the OCSP certificate status code as per RFC 6960 section 2.2.
+
+**Returns**
+
+- `status:number`: [OCSP certificate status code constants](#ocsp-certificate-status-code), or nil on error.
+- `err:string`: error string.
+
+
+### status, err = ctx:peer_ocsp_crl_reason()
+
+returns the OCSP certificate revocation reason status code as per RFC 5280 section 5.3.1.
+
+**Returns**
+
+- `reason:number`: [CTL reason status code constants](#ctl-reason-status-code), or nil on error.
+- `err:string`: error string.
+
+
+### epoch, err = ctx:peer_ocsp_next_update()
+
+returns the OCSP next update time.
+
+**Returns**
+
+- `epoch:number`: a time in epoch-seconds on success or nil on error.
+- `err:string`: error string.
+
+
+### status, err = ctx:peer_ocsp_response_status()
+
+returns the OCSP response status as per RFC 6960 section 2.3.
+
+**Returns**
+
+- `statis:number`: [OCSP response status code](#ocsp-response-status-code), or nil on error.
+- `err:string`: error string.
+
+
+### res, err = ctx:peer_ocsp_result()
+
+returns the message string of OCSP response status, OCSP certificate status or OCSP certificate revocation reason status.
+
+**Returns**
+
+- `res:string`: message string or nil on error.
+- `err:string`: error string.
+
+
+### epoch, err = ctx:peer_ocsp_revocation_time()
+
+returns the OCSP revocation time.
+
+**Returns**
+
+- `epoch:number`: a time in epoch-seconds on success or nil on error.
+- `err:string`: error string.
+
+
+### epoch, err = ctx:peer_ocsp_this_update()
+
+returns the OCSP this update time.
+
+**Returns**
+
+- `epoch:number`: a time in epoch-seconds on success or nil on error.
+- `err:string`: error string.
+
+
+### url, err = ctx:peer_ocsp_url()
+
+returns the URL for OCSP validation of the peer certificate from ctx.
+
+**Returns**
+
+- `url:string`: url string.
+- `err:string`: error string.
+
 
 
 ## Common methods of client and server context
@@ -311,6 +446,16 @@ this method will only succeed after the handshake is complete.
 - `ver:string`: a TLS version.
 
 
+### alpn = ctx:conn_alpn_selected()
+
+returns a string that specifies the ALPN protocol selected for use with the peer connected to ctx. If no protocol was selected then NULL is returned.
+
+
+**Returns**
+
+- `alpn:string`: ALPN protocol selected strings.
+
+
 ### ciph = ctx:conn_cipher()
 
 returns a string corresponding to the cipher suite negotiated with the peer connected to ctx.
@@ -362,6 +507,20 @@ allocates a new default configuration object
 
 
 ## Common configuration methods of client and server
+
+
+### ok, err = cfg:set_alpn( alpn )
+
+sets the ALPN protocols that are supported. The alpn string is a comma separated list of protocols, in order of preference.
+
+**Params**
+
+- `alpn:string`: comma separated list of protocols.
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message.
 
 
 ### ok, err = cfg:set_ca_file( file )
@@ -480,14 +639,15 @@ directly sets the private key from memory.
 - `err:string`: error message.
 
 
-### ok, err = cfg:set_keypair_file( certfile, keyfile )
+### ok, err = cfg:set_keypair_file( certfile, keyfile [, staplefile] )
 
-sets the files from which the public certificate and private key will be read.
+sets the files from which the public certificate, private key, and DER encoded OCSP staple will be read.
 
 **Params**
 
 - `certfile:string`: filename of cert file.
 - `keyfile:string`: filename of key file.
+- `staplefile:string`: filename of OCSP staple file.
 
 **Returns**
 
@@ -495,20 +655,49 @@ sets the files from which the public certificate and private key will be read.
 - `err:string`: error message.
 
 
-### ok, err = cfg:set_keypair( cert, key )
+### ok, err = cfg:set_keypair( cert, key [, staple]  )
 
-directly sets the public certificate and private key from memory.
+directly sets the public certificate, private key, and DER encoded OCSP staple from memory.
+
 
 **Params**
 
 - `cert:string`: cert data.
 - `key:string`: key data.
+- `staple:string`: OCSP staple data.
 
 **Returns**
 
 - `ok:boolean`: true on success.
 - `err:string`: error message.
 
+
+### ok, err = cfg:set_ocsp_staple( staple )
+
+sets a DER-encoded OCSP response to be stapled during the TLS handshake from memory.
+
+**Params**
+
+- `staple:string`: OCSP staple data.
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message.
+
+
+### ok, err = cfg:set_ocsp_staple_file( staplefile )
+
+sets a DER-encoded OCSP response to be stapled during the TLS handshake from the specified file.
+
+**Params**
+
+- `staplefile:string`: filename of OCSP staple file.
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message.
 
 
 ### ok, err = cfg:set_protocols( protocol )
@@ -550,6 +739,38 @@ clears any secret keys from memory.
 
 
 ## Configuration methods for server
+
+
+### ok, err = cfg:add_keypair_file( certfile, keyfile [, staplefile] )
+
+adds an additional public certificate, private key, and DER encoded OCSP staple from the specified files, used as an alternative certificate for Server Name Indication.
+
+**Params**
+
+- `certfile:string`: filename of cert file.
+- `keyfile:string`: filename of key file.
+- `staplefile:string`: filename of OCSP staple file.
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message.
+
+
+### ok, err = cfg:add_keypair( cert, key [, staple] )
+
+adds an additional public certificate, private key, and DER encoded OCSP staple from memory, used as an alternative certificate for Server Name Indication
+
+**Params**
+
+- `cert:string`: cert data.
+- `key:string`: key data.
+- `staple:string`: OCSP staple data.
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message.
 
 
 ### cfg:prefer_ciphers_client()
@@ -596,6 +817,50 @@ $ openssl ecparam -list_curves
 - `err:string`: error message.
 
 
+### ok, err = cfg:set_session_id( sid )
+
+sets the session identifier that will be used by the TLS server when sessions are enabled. By default a random value is used.
+
+**Params**
+
+- `sid:string`: session identifier.
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message.
+
+
+### ok, err = cfg:set_session_lifetime( lifetime )
+
+sets the lifetime to be used for TLS sessions. Session support is disabled if a lifetime of zero is specified.
+
+**Params**
+
+- `lifetime:number`: session lifetime. (default `0`)
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message.
+
+
+### ok, err = cfg:add_ticket_key( keyrev, key )
+
+adds a key used for the encryption and authentication of TLS tickets. By default keys are generated and rotated automatically based on their lifetime. This function should only be used to synchronise ticket encryption key across multiple processes. Re-adding a known key will result in an error, unless it is the most recently added key.
+
+**Params**
+
+- `keyrev:number`: revision number of key.
+- `key:string`: key string.
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message.
+
+
+
 ## Configuration methods for client
 
 
@@ -607,6 +872,11 @@ disables server name verification. Be careful when using this option.
 ### cfg:verify()
 
 reenables server name and certificate verification.
+
+
+### cfg:ocsp_require_stapling()
+
+requires that a valid stapled OCSP response be provided during the TLS handshake.
 
 
 ### cfg:set_verify_depth( depth )
