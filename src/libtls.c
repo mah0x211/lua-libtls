@@ -583,6 +583,12 @@ LUALIB_API int luaopen_libtls( lua_State *L )
     lauxh_pushint2tbl( L, "TLS_v12", TLS_PROTOCOL_TLSv1_2 );
     lauxh_pushint2tbl( L, "TLS_v1x", TLS_PROTOCOL_TLSv1 );
 
+    // RFC 6960 Section 2.2
+    // add TLS_OCSP_CERT_* constants
+    lauxh_pushint2tbl( L, "OCSP_CERT_GOOD", TLS_OCSP_CERT_GOOD );
+    lauxh_pushint2tbl( L, "OCSP_CERT_REVOKED", TLS_OCSP_CERT_REVOKED );
+    lauxh_pushint2tbl( L, "OCSP_CERT_UNKNOWN", TLS_OCSP_CERT_UNKNOWN );
+
     // RFC 6960 Section 2.3
     // add TLS_OCSP_RESPONSE_* constants
     lauxh_pushint2tbl( L, "OCSP_RESPONSE_SUCCESSFUL",
