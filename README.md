@@ -237,6 +237,25 @@ writes message to the socket.
 **NOTE:** all return values will be nil if closed by peer.
 
 
+### len, err, again = ctx:sendfile( fd, bytes [, offset] )
+
+send a file to the socket
+
+**Parameters**
+
+- `fd:number`: file descriptor.
+- `bytes:number`: how many bytes of the file should be sent.
+- `offset:number`: specifies where to begin in the file (default 0).
+
+**Returns**
+
+- `len:number`: number of bytes sent.
+- `err:string`: error string.
+- `again:boolean`: true if len != bytes, or errno is EAGAIN, EWOULDBLOCK or EINTR.
+
+**NOTE:** all return values will be nil if closed by peer.
+
+
 ### ok, err = ctx:ocsp_process_response( res )
 
 processes a raw OCSP response in response of size size to check the revocation status of the peer certificate from ctx. A successful return true indicates that the certificate has not been revoked.
