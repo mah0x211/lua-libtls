@@ -315,8 +315,7 @@ static int sendfile_lua( lua_State *L )
     if( !len ){
         free( buf );
         lua_pushinteger( L, 0 );
-        lua_pushnil( L );
-        return 2;
+        return 1;
     }
     // got error
     else if( len == -1 )
