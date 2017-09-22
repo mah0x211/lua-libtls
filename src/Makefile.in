@@ -1,6 +1,6 @@
 CC=@CC@
 CFLAGS=@CFLAGS@ -Wall -Wno-trigraphs -Wmissing-field-initializers -Wmissing-prototypes -Wreturn-type -Wmissing-braces -Wparentheses -Wswitch -Wunused-function -Wunused-label -Wunused-parameter -Wunused-variable -Wunused-value -Wuninitialized -Wunknown-pragmas -Wshadow -Wsign-compare
-CPPFLAGS=-I. -I../deps/lauxhlib -I../deps/libressl/include @CPPFLAGS@
+CPPFLAGS=-I. -I../deps/lauxhlib -I../libressl/include @CPPFLAGS@
 LDFLAGS=@LIBFLAG@
 LIBS=@LIBS@ ../libressl/tls/.libs/libtls.a ../libressl/ssl/.libs/libssl.a ../libressl/crypto/.libs/libcrypto.a
 TARGET=@PACKAGE@.@LIB_EXTENSION@
@@ -21,9 +21,9 @@ $(TARGET):
 install:
 	mkdir -p $(LIBDIR)
 	cp $(TARGET) $(LIBDIR)
-	cp ../deps/libressl/apps/openssl/cert.pem $(CONFDIR)
-	cp ../deps/libressl/apps/openssl/openssl.cnf $(CONFDIR)
-	cp ../deps/libressl/apps/openssl/x509v3.cnf $(CONFDIR)
+	cp ../libressl/apps/openssl/cert.pem $(CONFDIR)
+	cp ../libressl/apps/openssl/openssl.cnf $(CONFDIR)
+	cp ../libressl/apps/openssl/x509v3.cnf $(CONFDIR)
 	rm -f *.o $(TARGET)
 
 # cleanup
