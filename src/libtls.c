@@ -527,12 +527,7 @@ static int accept_socket_lua( lua_State *L )
     int sock = lauxh_checkinteger( L, 2 );
     ltls_t *c = lua_newuserdata( L, sizeof( ltls_t ) );
 
-    if( !c ){
-        lua_pushnil( L );
-        lua_pushstring( L, strerror( errno ) );
-        return 2;
-    }
-    else if( tls_accept_socket( tls->ctx, &c->ctx, sock ) ){
+    if( tls_accept_socket( tls->ctx, &c->ctx, sock ) ){
         return tls_error_lua( L, tls, lua_pushnil );
     }
 
@@ -549,12 +544,7 @@ static int accept_fds_lua( lua_State *L )
     int fdw = lauxh_checkinteger( L, 3 );
     ltls_t *c = lua_newuserdata( L, sizeof( ltls_t ) );
 
-    if( !c ){
-        lua_pushnil( L );
-        lua_pushstring( L, strerror( errno ) );
-        return 2;
-    }
-    else if( tls_accept_fds( tls->ctx, &c->ctx, fdr, fdw ) ){
+    if( tls_accept_fds( tls->ctx, &c->ctx, fdr, fdw ) ){
         return tls_error_lua( L, tls, lua_pushnil );
     }
 
@@ -585,7 +575,7 @@ static int new_lua( lua_State *L, struct tls *(*fn)( void ) )
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
     ltls_t *tls = lua_newuserdata( L, sizeof( ltls_t ) );
 
-    if( !tls || !( tls->ctx = fn() ) || tls_configure( tls->ctx, cfg->ctx ) )
+    if( !( tls->ctx = fn() ) || tls_configure( tls->ctx, cfg->ctx ) )
     {
         if( tls && tls->ctx ){
             tls_free( tls->ctx );

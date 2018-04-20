@@ -573,7 +573,7 @@ static int new_lua( lua_State *L )
 {
     ltls_config_t *cfg = lua_newuserdata( L, sizeof( ltls_config_t ) );
 
-    if( !cfg || !( cfg->ctx = tls_config_new() ) ){
+    if( !( cfg->ctx = tls_config_new() ) ){
         lua_pushnil( L );
         lua_pushstring( L, strerror( errno ) );
         return 2;
