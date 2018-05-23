@@ -207,6 +207,21 @@ static int set_verify_depth_lua( lua_State *L )
 }
 
 
+static int set_session_fd_lua( lua_State *L )
+{
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    int fd = lauxh_checkinteger( L, 2 );
+
+    if( tls_config_set_session_fd( cfg->ctx, fd ) ){
+        return config_error_lua( L, cfg );
+    }
+
+    lua_pushboolean( L, 1 );
+
+    return 1;
+}
+
+
 static int set_protocols_lua( lua_State *L )
 {
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
@@ -639,6 +654,7 @@ LUALIB_API int luaopen_libtls_config( lua_State *L )
         { "set_ocsp_staple", set_ocsp_staple_lua },
 
         { "set_protocols", set_protocols_lua },
+        { "set_session_fd", set_session_fd_lua },
         { "set_verify_depth", set_verify_depth_lua },
 
         { "prefer_ciphers_client", prefer_ciphers_client_lua },
