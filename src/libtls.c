@@ -148,6 +148,16 @@ static int conn_version_lua( lua_State *L )
 }
 
 
+static int conn_session_resumed_lua( lua_State *L )
+{
+    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+
+    lua_pushboolean( L, tls_conn_session_resumed( tls->ctx ) );
+
+    return 1;
+}
+
+
 static int conn_servername_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
@@ -649,6 +659,7 @@ LUALIB_API int luaopen_libtls( lua_State *L )
         { "conn_alpn_selected", conn_alpn_selected_lua },
         { "conn_cipher", conn_cipher_lua },
         { "conn_servername", conn_servername_lua },
+        { "conn_session_resumed", conn_session_resumed_lua },
         { "conn_version", conn_version_lua },
         { "ocsp_process_response", ocsp_process_response_lua },
         { "peer_ocsp_cert_status", peer_ocsp_cert_status_lua },
