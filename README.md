@@ -256,6 +256,15 @@ send a file to the socket
 **NOTE:** all return values will be nil if closed by peer.
 
 
+### ok = ctx:conn_session_resumed()
+
+indicates whether a TLS session has been resumed during the handshake with the server connected to ctx.
+
+**Returns**
+
+- `ok:boolean`: true if a TLS session was resumed.
+
+
 ### ok, err = ctx:ocsp_process_response( res )
 
 processes a raw OCSP response in response of size size to check the revocation status of the peer certificate from ctx. A successful return true indicates that the certificate has not been revoked.
@@ -453,6 +462,16 @@ this method will only succeed after the handshake is complete.
 **Returns**
 
 - `period:number`: end of the validity period.
+
+
+### pem, err = ctx:peer_cert_chain_pem()
+
+returns a PEM-encoded certificate chain for the peer certificate from ctx.
+
+**Returns**
+
+- `pem:string`: PEM-encoded cert chain data.
+- `err:string`: error message.
 
 
 ### ver = ctx:conn_version()
