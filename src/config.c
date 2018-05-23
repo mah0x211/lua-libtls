@@ -122,21 +122,21 @@ static int verify_client_lua( lua_State *L )
 }
 
 
-static int verify_lua( lua_State *L )
-{
-    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-
-    tls_config_verify( cfg->ctx );
-
-    return 0;
-}
-
-
 static int ocsp_require_stapling_lua( lua_State *L )
 {
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
 
     tls_config_ocsp_require_stapling( cfg->ctx );
+
+    return 0;
+}
+
+
+static int verify_lua( lua_State *L )
+{
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+
+    tls_config_verify( cfg->ctx );
 
     return 0;
 }
@@ -233,12 +233,13 @@ static int set_protocols_lua( lua_State *L )
 }
 
 
-static int set_ocsp_staple_file_lua( lua_State *L )
+static int set_ocsp_staple_lua( lua_State *L )
 {
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-    const char *file = lauxh_checkstring( L, 2 );
+    size_t olen = 0;
+    const uint8_t *ocsp = (const uint8_t*)lauxh_checklstring( L, 2, &olen );
 
-    if( tls_config_set_ocsp_staple_file( cfg->ctx, file ) ){
+    if( tls_config_set_ocsp_staple_mem( cfg->ctx, ocsp, olen ) ){
         return config_error_lua( L, cfg );
     }
 
@@ -248,13 +249,12 @@ static int set_ocsp_staple_file_lua( lua_State *L )
 }
 
 
-static int set_ocsp_staple_lua( lua_State *L )
+static int set_ocsp_staple_file_lua( lua_State *L )
 {
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
-    size_t olen = 0;
-    const uint8_t *ocsp = (const uint8_t*)lauxh_checklstring( L, 2, &olen );
+    const char *file = lauxh_checkstring( L, 2 );
 
-    if( tls_config_set_ocsp_staple_mem( cfg->ctx, ocsp, olen ) ){
+    if( tls_config_set_ocsp_staple_file( cfg->ctx, file ) ){
         return config_error_lua( L, cfg );
     }
 
@@ -634,8 +634,8 @@ LUALIB_API int luaopen_libtls_config( lua_State *L )
         { "set_keypair_file", set_keypair_file_lua },
         { "set_keypair", set_keypair_lua },
 
-        { "set_ocsp_staple", set_ocsp_staple_lua },
         { "set_ocsp_staple_file", set_ocsp_staple_file_lua },
+        { "set_ocsp_staple", set_ocsp_staple_lua },
 
         { "set_protocols", set_protocols_lua },
         { "set_verify_depth", set_verify_depth_lua },
