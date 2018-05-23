@@ -599,6 +599,7 @@ static int load_file_lua( lua_State *L )
     }
 
     lua_pushlstring( L, (const char*)content, len );
+    tls_unload_file( content, len );
 
     return 1;
 }
