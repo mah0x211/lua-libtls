@@ -3,7 +3,7 @@
 set -e
 set -x
 
-VERSION="2.5.4"
+VERSION="2.7.3"
 DIRNAME="libressl-${VERSION}"
 ARCHIVE="${DIRNAME}.tar.gz"
 
