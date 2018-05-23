@@ -631,6 +631,35 @@ sets the list of ciphers that may be used.
 - `err:string`: error message.
 
 
+### ok, err = cfg:set_crl_file( file )
+
+sets the filename used to load a file containing the Certificate Revocation List (CRL).
+
+**Params**
+
+- `file:string`: filename of CRL file.
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message.
+
+
+### ok, err = cfg:set_crl( crl )
+
+sets the CRL directly from memory.
+
+**Params**
+
+- `crl:string`: CRL data.
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message.
+
+
+
 ### ok, err = cfg:set_key_file( file )
 
 sets the file from which the private key will be read.
@@ -840,6 +869,30 @@ $ openssl ecparam -list_curves
 - `err:string`: error message.
 
 
+### ok, err = cfg:set_ecdhecurves( names )
+
+specifies the names of the elliptic curves that may be used during Elliptic Curve Diffie-Hellman Ephemeral (ECDHE) key exchange. 
+
+This is a comma separated list, given in order of preference. The special value of `default` will use the default curves (currently `X25519`, `P-256` and `P-384`). 
+
+**NOTE:** This function replaces `set_ecdhecurve`, which is deprecated
+
+please check the list of names that can be specified with the following command;
+
+```sh
+$ openssl ecparam -list_curves
+```
+
+**Params**
+
+- `names:string`: comma separated list, given in order of preference.
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message.
+
+
 ### ok, err = cfg:set_session_id( sid )
 
 sets the session identifier that will be used by the TLS server when sessions are enabled. By default a random value is used.
@@ -885,6 +938,26 @@ adds a key used for the encryption and authentication of TLS tickets. By default
 
 
 ## Configuration methods for client
+
+
+### ok, err = cfg:set_session_fd( fd )
+
+sets a file descriptor to be used to manage data for TLS sessions. 
+
+The given file descriptor must be a regular file and be owned by the current user, with permissions being restricted to only allow the owner to read and write the file (`0600`). 
+
+If the file has a non-zero length, the client will attempt to read session data from this file and resume the previous TLS session with the server. Upon a successful handshake the file will be updated with current session data, if available. 
+
+**NOTE:** The caller is responsible for closing this file descriptor, after all TLS contexts that have been configured to use it have been freed via tls_free().
+
+**Params**
+
+- `fd:number`: file descriptor.
+
+**Returns**
+
+- `ok:boolean`: true on success.
+- `err:string`: error message.
 
 
 ### cfg:insecure_noverifyname()
