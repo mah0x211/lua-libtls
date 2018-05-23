@@ -4,11 +4,26 @@ set -e
 set -x
 
 VERSION="2.5.4"
+DIRNAME="libressl-${VERSION}"
+ARCHIVE="${DIRNAME}.tar.gz"
 
-rm -rf libressl*
-wget http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${VERSION}.tar.gz
-tar xvzf libressl-${VERSION}.tar.gz
-mv libressl-${VERSION} libressl
+
+#
+# download archive file
+#
+if [ ! -f $ARCHIVE ]; then
+    rm -rf libressl*
+    wget http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/$ARCHIVE
+fi
+
+#
+# extract archive file
+#
+if [ ! -d "libressl" ]; then
+    tar xvzf $ARCHIVE
+    mv $DIRNAME libressl
+fi
+
 cd libressl
 ./configure --with-openssldir=${LUA_CONFDIR} CFLAGS="-fPIC"
 make
