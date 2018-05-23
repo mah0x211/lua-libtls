@@ -415,6 +415,21 @@ static int set_dheparams_lua( lua_State *L )
 }
 
 
+static int set_crl_file_lua( lua_State *L )
+{
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *file = lauxh_checkstring( L, 2 );
+
+    if( tls_config_set_crl_file( cfg->ctx, file ) ){
+        return config_error_lua( L, cfg );
+    }
+
+    lua_pushboolean( L, 1 );
+
+    return 1;
+}
+
+
 static int set_ciphers_lua( lua_State *L )
 {
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
@@ -656,6 +671,7 @@ LUALIB_API int luaopen_libtls_config( lua_State *L )
         { "set_cert", set_cert_lua },
 
         { "set_ciphers", set_ciphers_lua },
+        { "set_crl_file", set_crl_file_lua },
         { "set_dheparams", set_dheparams_lua },
         { "set_ecdhecurve", set_ecdhecurve_lua  },
         { "set_ecdhecurves", set_ecdhecurves_lua  },
