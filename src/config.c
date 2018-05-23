@@ -370,6 +370,21 @@ static int set_key_file_lua( lua_State *L )
 }
 
 
+static int set_ecdhecurves_lua( lua_State *L )
+{
+    ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
+    const char *names = lauxh_checkstring( L, 2 );
+
+    if( tls_config_set_ecdhecurves( cfg->ctx, names ) ){
+        return config_error_lua( L, cfg );
+    }
+
+    lua_pushboolean( L, 1 );
+
+    return 1;
+}
+
+
 static int set_ecdhecurve_lua( lua_State *L )
 {
     ltls_config_t *cfg = lauxh_checkudata( L, 1, LIBTLS_CONFIG_MT );
@@ -643,6 +658,7 @@ LUALIB_API int luaopen_libtls_config( lua_State *L )
         { "set_ciphers", set_ciphers_lua },
         { "set_dheparams", set_dheparams_lua },
         { "set_ecdhecurve", set_ecdhecurve_lua  },
+        { "set_ecdhecurves", set_ecdhecurves_lua  },
 
         { "set_key_file", set_key_file_lua },
         { "set_key", set_key_lua },
