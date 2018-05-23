@@ -190,6 +190,22 @@ static int conn_alpn_selected_lua( lua_State *L )
 }
 
 
+static int peer_cert_chain_pem_lua( lua_State *L )
+{
+    ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    size_t len = 0;
+    const uint8_t *pem = tls_peer_cert_chain_pem( tls->ctx, &len );
+
+    if( !pem ){
+        return tls_error_lua( L, tls, lua_pushnil );
+    }
+
+    lua_pushlstring( L, (const char*)pem, len );
+
+    return 1;
+}
+
+
 static int peer_cert_notafter_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
@@ -629,6 +645,7 @@ LUALIB_API int luaopen_libtls( lua_State *L )
         { "peer_cert_subject", peer_cert_subject_lua },
         { "peer_cert_notbefore", peer_cert_notbefore_lua },
         { "peer_cert_notafter", peer_cert_notafter_lua },
+        { "peer_cert_chain_pem", peer_cert_chain_pem_lua },
         { "conn_alpn_selected", conn_alpn_selected_lua },
         { "conn_cipher", conn_cipher_lua },
         { "conn_servername", conn_servername_lua },
