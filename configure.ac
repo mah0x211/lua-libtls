@@ -32,6 +32,13 @@ AC_CHECK_HEADERS(
     AC_MSG_FAILURE([required header not found])
 )
 
+#
+# libtls
+#
+AC_SUBST([LIBTLS_CFLAGS], [`cat ./libtls-cflags`])
+AC_SUBST([LIBTLS_LDFLAGS], [`cat ./libtls-ldflags`])
+AC_SUBST([LIBTLS_LIBS], [`cat ./libtls-libs`])
+
 
 AC_CONFIG_FILES([ \
     Makefile \
