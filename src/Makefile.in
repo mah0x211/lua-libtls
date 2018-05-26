@@ -17,7 +17,7 @@ all: $(OBJ) $(TARGET)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^
 
 $(TARGET):
-	$(CC) $(LIBFLAG) $(LDFLAGS) -o $@ *.o $(LIBS)
+	$(CC) $(LIBFLAG) -o $@ *.o $(LDFLAGS) $(LIBS)
 
 install:
 	mkdir -p $(LIBDIR)

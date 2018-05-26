@@ -9,10 +9,10 @@ FILE_LIBS="libtls-libs"
 #
 # checking environment variables
 #
-if [[ -z "$VERSION" ]]; then
+if [ -z "$VERSION" ]; then
     echo 'ERROR: the VERSION environment is not defind'
     exit -1
-elif [[ -z "$CONFDIR" ]]; then
+elif [ -z "$CONFDIR" ]; then
     echo 'ERROR: the CONFDIR environment is not defind'
     exit -1
 fi

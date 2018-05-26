@@ -39,6 +39,11 @@ AC_SUBST([LIBTLS_CFLAGS], [`cat ./libtls-cflags`])
 AC_SUBST([LIBTLS_LDFLAGS], [`cat ./libtls-ldflags`])
 AC_SUBST([LIBTLS_LIBS], [`cat ./libtls-libs`])
 
+#
+# checking pthread library
+#
+AC_CHECK_LIB([pthread], [pthread_once], LIBTLS_LIBS="$LIBTLS_LIBS -lpthread")
+
 
 AC_CONFIG_FILES([ \
     Makefile \
