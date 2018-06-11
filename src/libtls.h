@@ -34,12 +34,13 @@
 #include <errno.h>
 #include "config.h"
 #include "lauxhlib.h"
+#include "lua_iovec.h"
 #include "tls.h"
 
 
-#define TOSTRING_MT(L,tname) ({ \
+#define TOSTRING_MT(L,tname) ({                                 \
     lua_pushfstring( L, tname ": %p", lua_touserdata( L, 1 ) ); \
-    1; \
+    1;                                                          \
 })
 
 
