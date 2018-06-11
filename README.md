@@ -237,6 +237,21 @@ writes message to the socket.
 **NOTE:** all return values will be nil if closed by peer.
 
 
+### len, err, again = ctx:writev( iov [, offset] )
+
+send iovec messages at once.
+
+- **Parameters**
+    - `iov:iovec`: instance of [iovec](https://github.com/mah0x211/lua-iovec).
+    - `offset:numbger`: offset at which the output operation is to be performed.
+- **Returns**
+    - `len:number`: the number of bytes sent.
+    - `err:string`: error string.
+    - `again:bool`: true if all data has not been sent.
+
+**NOTE:** all return values will be nil if closed by peer.
+
+
 ### len, err, again = ctx:sendfile( fd, bytes [, offset] )
 
 send a file to the socket
