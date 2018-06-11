@@ -1,6 +1,6 @@
 CC=@CC@
 CFLAGS=@CFLAGS@ -Wall -Wno-trigraphs -Wmissing-field-initializers -Wmissing-prototypes -Wreturn-type -Wmissing-braces -Wparentheses -Wswitch -Wunused-function -Wunused-label -Wunused-parameter -Wunused-variable -Wunused-value -Wuninitialized -Wunknown-pragmas -Wshadow -Wsign-compare
-CPPFLAGS=-I. -I../deps/lauxhlib @LIBTLS_CFLAGS@ @CPPFLAGS@
+CPPFLAGS=-I. -I../deps/lauxhlib -I../deps/lua-iovec/src @LIBTLS_CFLAGS@ @CPPFLAGS@
 LIBFLAG=@LIBFLAG@
 LDFLAGS=@LDFLAGS@ @LIBTLS_LDFLAGS@
 LIBS=@LIBS@ @LIBTLS_LIBS@
