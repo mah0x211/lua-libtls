@@ -769,6 +769,10 @@ LUALIB_API int luaopen_libtls( lua_State *L )
         ptr++;
     }
 
+    // add TLS_WANT_* constants
+    lauxh_pushint2tbl( L, "WANT_POLLIN", TLS_WANT_POLLIN );
+    lauxh_pushint2tbl( L, "WANT_POLLOUT", TLS_WANT_POLLOUT );
+
     // add TLS_PROTOCOLS_* constants
     lauxh_pushint2tbl( L, "TLS_v10", TLS_PROTOCOL_TLSv1_0 );
     lauxh_pushint2tbl( L, "TLS_v11", TLS_PROTOCOL_TLSv1_1 );
