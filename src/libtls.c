@@ -543,14 +543,22 @@ static int read_lua( lua_State *L )
 static int handshake_lua( lua_State *L )
 {
     ltls_t *tls = lauxh_checkudata( L, 1, LIBTLS_MT );
+    int rv = tls_handshake( tls->ctx );
 
-    if( tls_handshake( tls->ctx ) ){
-        return tls_error_lua( L, tls, lua_pushboolean, 0 );
+    switch( rv ){
+        case 0:
+            lua_pushboolean( L, 1 );
+            return 1;
+
+        case -1:
+            return tls_error_lua( L, tls, lua_pushboolean, 0 );
+
+        default:
+            lua_pushboolean( L, 0 );
+            lua_pushnil( L );
+            lua_pushinteger( L, rv );
+            return 3;
     }
-
-    lua_pushboolean( L, 1 );
-
-    return 1;
 }
 
 
