@@ -412,7 +412,8 @@ static int write_lua( lua_State *L )
             lua_pushinteger( L, 0 );
             lua_pushnil( L );
             lua_pushboolean( L, 1 );
-            return 3;
+            lua_pushinteger( L, rv );
+            return 4;
 
         default:
             lua_pushinteger( L, rv );
