@@ -480,7 +480,8 @@ static int writev_lua( lua_State *L )
                 lua_pushinteger( L, sent );
                 lua_pushnil( L );
                 lua_pushboolean( L, 1 );
-                return 3;
+                lua_pushinteger( L, rv );
+                return 4;
 
             default:
                 sent += (size_t)rv;
