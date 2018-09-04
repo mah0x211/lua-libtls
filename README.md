@@ -26,6 +26,12 @@ local tls = require('libtls')
 
 ## Constants of libtls module
 
+### Required file descriptor states
+
+- `WANT_POLLIN`: The underlying read file descriptor needs to be readable in order to continue.
+- `WANT_POLLOUT`: The underlying write file descriptor needs to be writeable in order to continue.
+
+
 ### Protocol Versions
 
 - `TLS_v10`: TLS version 1.0
@@ -202,7 +208,7 @@ connects a client context to an already established socket connection.
 - `err:string`: error message.
 
 
-### len, err, again = ctx:read( [bufsize] )
+### len, err, again, want = ctx:read( [bufsize] )
 
 reads bufsize bytes of data from the socket.
 
@@ -215,11 +221,12 @@ reads bufsize bytes of data from the socket.
 - `msg:string`: received message string.
 - `err:string`: error string.
 - `again:boolean`: true if got a `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`.
+- `want:number`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
 
 **NOTE:** all return values will be nil if closed by peer.
 
 
-### len, err, again = ctx:write( msg )
+### len, err, again, want = ctx:write( msg )
 
 writes message to the socket.
 
@@ -231,28 +238,33 @@ writes message to the socket.
 
 - `len:number`: the number of bytes write.
 - `err:string`: error string.
-- `again:boolean`: true if got a `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`.
+- `again:bool`: true if all data has not been sent.
+- `want:number`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
 
 
 **NOTE:** all return values will be nil if closed by peer.
 
 
-### len, err, again = ctx:writev( iov [, offset] )
+### len, err, again, want = ctx:writev( iov [, offset] )
 
 send iovec messages at once.
 
-- **Parameters**
-    - `iov:iovec`: instance of [iovec](https://github.com/mah0x211/lua-iovec).
-    - `offset:numbger`: offset at which the output operation is to be performed.
-- **Returns**
-    - `len:number`: the number of bytes sent.
-    - `err:string`: error string.
-    - `again:bool`: true if all data has not been sent.
+**Parameters**
+
+- `iov:iovec`: instance of [iovec](https://github.com/mah0x211/lua-iovec).
+- `offset:numbger`: offset at which the output operation is to be performed.
+
+**Returns**
+
+- `len:number`: the number of bytes sent.
+- `err:string`: error string.
+- `again:bool`: true if all data has not been sent.
+- `want:number`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
 
 **NOTE:** all return values will be nil if closed by peer.
 
 
-### len, err, again = ctx:sendfile( fd, bytes [, offset] )
+### len, err, again, want = ctx:sendfile( fd, bytes [, offset] )
 
 send a file to the socket
 
@@ -267,6 +279,7 @@ send a file to the socket
 - `len:number`: number of bytes sent.
 - `err:string`: error string.
 - `again:boolean`: true if len != bytes, or errno is EAGAIN, EWOULDBLOCK or EINTR.
+- `want:number`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
 
 **NOTE:** all return values will be nil if closed by peer.
 
@@ -389,7 +402,7 @@ Only the TLS layer will be shut down and the caller is responsible for closing t
 - `err:string`: error message.
 
 
-### ok, err = ctx:handshake()
+### ok, err, want = ctx:handshake()
 
 performs the TLS handshake.
 It is only necessary to call this function if you need to guarantee that the handshake has completed, as both `ctx:read()` and `ctx:write()` will perform the TLS handshake if necessary.
@@ -398,6 +411,7 @@ It is only necessary to call this function if you need to guarantee that the han
 
 - `ok:boolean`: true on success.
 - `err:string`: error message.
+- `want:number`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
 
 
 ### ok = ctx:peer_cert_provided()
