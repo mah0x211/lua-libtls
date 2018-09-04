@@ -526,7 +526,8 @@ static int read_lua( lua_State *L )
             lua_pushnil( L );
             lua_pushnil( L );
             lua_pushboolean( L, 1 );
-            rv = 3;
+            lua_pushinteger( L, rv );
+            rv = 4;
         break;
 
         default:
