@@ -206,25 +206,14 @@ static int set_session_fd_lua(lua_State *L)
 static int set_protocols_lua(lua_State *L)
 {
     ltls_config_t *cfg = lauxh_checkudata(L, 1, LIBTLS_CONFIG_MT);
-    uint32_t protocols = (uint32_t)lauxh_checkinteger(L, 2);
+    uint32_t protocols = (uint32_t)lauxh_optflags(L, 2);
 
-    switch (protocols) {
-    case TLS_PROTOCOL_TLSv1_0:
-    case TLS_PROTOCOL_TLSv1_1:
-    case TLS_PROTOCOL_TLSv1_2:
-    case TLS_PROTOCOL_TLSv1:
-        if (tls_config_set_protocols(cfg->ctx, protocols)) {
-            return config_error_lua(L, cfg);
-        }
-
-        lua_pushboolean(L, 1);
-        return 1;
-
-    default:
-        lua_pushboolean(L, 0);
-        lua_pushstring(L, strerror(EINVAL));
-        return 2;
+    if (tls_config_set_protocols(cfg->ctx, protocols)) {
+        return config_error_lua(L, cfg);
     }
+
+    lua_pushboolean(L, 1);
+    return 1;
 }
 
 static int set_ocsp_staple_lua(lua_State *L)

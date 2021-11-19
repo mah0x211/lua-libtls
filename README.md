@@ -801,13 +801,13 @@ sets a DER-encoded OCSP response to be stapled during the TLS handshake from the
 - `err:string`: error message.
 
 
-### ok, err = cfg:set_protocols( protocol )
+### ok, err = cfg:set_protocols( protocol, ... )
 
 sets which versions of the protocol may be used.
 
 **Params**
 
-- `protocol:number`:  [protocol version constants](#protocol-versions).
+- `protocol:integer`:  [protocol version constants](#protocol-versions).
 
 **Returns**
 
