@@ -602,6 +602,39 @@ static int load_file_lua(lua_State *L)
     return 1;
 }
 
+static int default_ca_cert_file_lua(lua_State *L)
+{
+    const char *cert = tls_default_ca_cert_file();
+
+    if (cert) {
+        lua_pushstring(L, cert);
+    } else {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+
+static int parse_protocols_lua(lua_State *L)
+{
+    const char *protostr = lauxh_checkstring(L, 1);
+    uint32_t protocols   = 0;
+
+    errno = 0;
+    if (tls_config_parse_protocols(&protocols, protostr) == 0) {
+        lua_pushinteger(L, protocols);
+        return 1;
+    }
+
+    lua_pushinteger(L, 0);
+    if (errno == 0) {
+        lua_pushstring(L, strerror(errno));
+        return 2;
+    }
+
+    return 1;
+}
+
 LUALIB_API int luaopen_libtls_config(lua_State *L)
 {
     struct luaL_Reg mmethod[] = {
@@ -625,6 +658,7 @@ LUALIB_API int luaopen_libtls_config(lua_State *L)
         {"set_ciphers",            set_ciphers_lua           },
         {"set_crl_file",           set_crl_file_lua          },
         {"set_crl",                set_crl_lua               },
+
         {"set_dheparams",          set_dheparams_lua         },
         {"set_ecdhecurve",         set_ecdhecurve_lua        },
         {"set_ecdhecurves",        set_ecdhecurves_lua       },
@@ -649,6 +683,7 @@ LUALIB_API int luaopen_libtls_config(lua_State *L)
         {"insecure_noverifyname",  insecure_noverifyname_lua },
         {"insecure_noverifytime",  insecure_noverifytime_lua },
         {"verify",                 verify_lua                },
+
         {"ocsp_require_stapling",  ocsp_require_stapling_lua },
         {"verify_client",          verify_client_lua         },
         {"verify_client_optional", verify_client_optional_lua},
@@ -661,9 +696,11 @@ LUALIB_API int luaopen_libtls_config(lua_State *L)
         {NULL,                     NULL                      }
     };
     struct luaL_Reg funcs[] = {
-        {"load_file", load_file_lua},
-        {"new",       new_lua      },
-        {NULL,        NULL         }
+        {"parse_protocols",      parse_protocols_lua     },
+        {"default_ca_cert_file", default_ca_cert_file_lua},
+        {"load_file",            load_file_lua           },
+        {"new",                  new_lua                 },
+        {NULL,                   NULL                    }
     };
     struct luaL_Reg *ptr = funcs;
 

@@ -224,6 +224,15 @@ static int conn_servername_lua(lua_State *L)
     return 0;
 }
 
+static int conn_cipher_strength_lua(lua_State *L)
+{
+    ltls_t *tls = lauxh_checkudata(L, 1, LIBTLS_MT);
+
+    lua_pushinteger(L, tls_conn_cipher_strength(tls->ctx));
+
+    return 1;
+}
+
 static int conn_cipher_lua(lua_State *L)
 {
     ltls_t *tls        = lauxh_checkudata(L, 1, LIBTLS_MT);
@@ -645,6 +654,15 @@ static int accept_fds_lua(lua_State *L)
     return 1;
 }
 
+static int reset_lua(lua_State *L)
+{
+    ltls_t *tls = lauxh_checkudata(L, 1, LIBTLS_MT);
+
+    tls_reset(tls->ctx);
+
+    return 0;
+}
+
 static int tostring_lua(lua_State *L)
 {
     return tostring_mt(L, LIBTLS_MT);
@@ -696,30 +714,44 @@ LUALIB_API int luaopen_libtls(lua_State *L)
         {NULL,         NULL        }
     };
     struct luaL_Reg method[] = {
+        {"reset",                     reset_lua                    },
+
         {"accept_fds",                accept_fds_lua               },
         {"accept_socket",             accept_socket_lua            },
+ // TODO: check the purpose and usage
+  // {"accept_cbs",                accept_cbs_lua               },
+
         {"connect",                   connect_lua                  },
         {"connect_fds",               connect_fds_lua              },
         {"connect_servername",        connect_servername_lua       },
         {"connect_socket",            connect_socket_lua           },
+ // TODO: check the purpose and usage
+  // {"connect_cbs",               connect_cbs_lua              },
+
         {"handshake",                 handshake_lua                },
+
         {"read",                      read_lua                     },
         {"write",                     write_lua                    },
         {"sendfile",                  sendfile_lua                 },
         {"close",                     close_lua                    },
+
         {"peer_cert_provided",        peer_cert_provided_lua       },
         {"peer_cert_contains_name",   peer_cert_contains_name_lua  },
+
         {"peer_cert_hash",            peer_cert_hash_lua           },
         {"peer_cert_issuer",          peer_cert_issuer_lua         },
         {"peer_cert_subject",         peer_cert_subject_lua        },
         {"peer_cert_notbefore",       peer_cert_notbefore_lua      },
         {"peer_cert_notafter",        peer_cert_notafter_lua       },
         {"peer_cert_chain_pem",       peer_cert_chain_pem_lua      },
+
         {"conn_alpn_selected",        conn_alpn_selected_lua       },
         {"conn_cipher",               conn_cipher_lua              },
+        {"conn_cipher_strength",      conn_cipher_strength_lua     },
         {"conn_servername",           conn_servername_lua          },
         {"conn_session_resumed",      conn_session_resumed_lua     },
         {"conn_version",              conn_version_lua             },
+
         {"ocsp_process_response",     ocsp_process_response_lua    },
         {"peer_ocsp_cert_status",     peer_ocsp_cert_status_lua    },
         {"peer_ocsp_crl_reason",      peer_ocsp_crl_reason_lua     },
@@ -762,7 +794,9 @@ LUALIB_API int luaopen_libtls(lua_State *L)
     lauxh_pushint2tbl(L, "TLS_v10", TLS_PROTOCOL_TLSv1_0);
     lauxh_pushint2tbl(L, "TLS_v11", TLS_PROTOCOL_TLSv1_1);
     lauxh_pushint2tbl(L, "TLS_v12", TLS_PROTOCOL_TLSv1_2);
+    lauxh_pushint2tbl(L, "TLS_v13", TLS_PROTOCOL_TLSv1_3);
     lauxh_pushint2tbl(L, "TLS_v1x", TLS_PROTOCOL_TLSv1);
+    lauxh_pushint2tbl(L, "TLS_DEFAULT", TLS_PROTOCOLS_DEFAULT);
 
     // RFC 6960 Section 2.2
     // add TLS_OCSP_CERT_* constants
@@ -804,6 +838,10 @@ LUALIB_API int luaopen_libtls(lua_State *L)
                       TLS_CRL_REASON_PRIVILEGE_WITHDRAWN);
     lauxh_pushint2tbl(L, "CRL_REASON_AA_COMPROMISE",
                       TLS_CRL_REASON_AA_COMPROMISE);
+
+    lauxh_pushint2tbl(L, "TLS_API", TLS_API);
+    lauxh_pushint2tbl(L, "MAX_SESSION_ID_LENGTH", TLS_MAX_SESSION_ID_LENGTH);
+    lauxh_pushint2tbl(L, "TICKET_KEY_SIZE", TLS_TICKET_KEY_SIZE);
 
     return 1;
 }

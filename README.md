@@ -14,6 +14,12 @@ you can use either the `libressl` or `libretls` libraries.
 - libretls: <https://git.causal.agency/libretls/about/>
 
 
+## Installation
+
+```
+luarocks install libtls
+```
+
 ---
 
 the following descriptions are almost same as libtls man page.
@@ -41,8 +47,8 @@ local tls = require('libtls')
 - `TLS_v10`: TLS version 1.0
 - `TLS_v11`: TLS version 1.1
 - `TLS_v12`: TLS version 1.2
-- `TLS_v1x`: TLS version 1.0, TLS version 1.1 and TLS version 1.2
-
+- `TLS_v1x`: TLS version 1.0, 1.1, 1.2 and 1.3
+- `TLS_DEFAULT`: TLS version 1.2 and 1.3
 
 ### OCSP certificate status code
 
@@ -73,6 +79,12 @@ local tls = require('libtls')
 - `CRL_REASON_REMOVE_FROM_CRL`
 - `CRL_REASON_PRIVILEGE_WITHDRAWN`
 - `CRL_REASON_AA_COMPROMISE`
+
+### misc
+
+- `TLS_API`
+- `MAX_SESSION_ID_LENGTH`
+- `TICKET_KEY_SIZE`
 
 
 ## Creating a TLS context
@@ -375,6 +387,10 @@ returns the URL for OCSP validation of the peer certificate from ctx.
 
 ## Common methods of client and server context
 
+### ctx:reset()
+
+reset the TLS context that allowing for it to be reused.
+
 
 ### ok, err = ctx:close()
 
@@ -518,6 +534,14 @@ this method will only succeed after the handshake is complete.
 
 - `ciph:string`: the cipher suite strings.
 
+### bits = ctx:conn_cipher_strength()
+
+returns the strength in bits for the symmetric cipher that is being used with the peer connected to ctx. this method will only succeed after the handshake is complete.
+
+**Returns**
+
+- `bits:integer`: the strength in bits.
+
 
 
 ## libtls.config module
@@ -528,7 +552,42 @@ local config = require('libtls.config')
 
 `libtls.config` module to use for the TLS configuration.
 
-## Loads a certificate or key
+
+## Utility functions
+
+### vers = config.parse_protocols( protostr )
+
+parses a protocol string and returns the corresponding value. this value can then be passed to the [config:set_protocols](#ok-err--cfgset_protocols-protocol-) method. 
+
+The protocol string `protostr` is a comma or colon separated list of keywords.  
+Valid keywords are:
+
+- `tlsv1.0`
+- `tlsv1.1`
+- `tlsv1.2`
+- `tlsv1.3`
+- `all` (all supported protocols)
+- `default` (an alias for `secure`)
+- `legacy` (an alias for `all`)
+- `secure` (currently TLSv1.2 and TLSv1.3)
+
+**Params**
+
+- `protostr:string`: error message.
+
+**Returns**
+
+- `vers:integer`:  [protocol version constants](#protocol-versions).
+
+
+### path = config.default_ca_cert_file()
+
+returns the path of the file that contains the default root certificates.
+
+**Returns**
+
+- `path:string`: pathname of default ca file.
+
 
 ### data, err = config.load_file( file [, password] )
 
