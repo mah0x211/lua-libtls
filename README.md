@@ -7,8 +7,12 @@ libtls bindings for lua.
 
 ## Dependencies
 
-- luarocks-fetch-gitrec: <https://github.com/siffiejoe/luarocks-fetch-gitrec>
+this module depends on the `libtls` library installed on your system.  
+you can use either the `libressl` or `libretls` libraries.
+
 - libressl-portable: <https://github.com/libressl-portable/portable>
+- libretls: <https://git.causal.agency/libretls/about/>
+
 
 ---
 

@@ -27,7 +27,6 @@
 #ifndef libtls_lua_h
 #define libtls_lua_h
 
-#include "config.h"
 #include "lauxhlib.h"
 #include "lua_iovec.h"
 #include "tls.h"

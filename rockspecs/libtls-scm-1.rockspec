@@ -2,24 +2,48 @@ rockspec_format = "3.0"
 package = "libtls"
 version = "scm-1"
 source = {
-    url = "git+https://github.com/mah0x211/lua-libtls.git"
+    url = "git+https://github.com/mah0x211/lua-libtls.git",
 }
 description = {
     summary = "libtls bindings for lua",
     homepage = "https://github.com/mah0x211/lua-libtls",
     license = "MIT/X11",
-    maintainer = "Masatoshi Teruya"
+    maintainer = "Masatoshi Fukunaga",
 }
 dependencies = {
     "lua >= 5.1",
 }
-build = {
-    type = "command",
-    build_command = [[
-        CONFDIR="$(CONFDIR)" VERSION="2.7.3" sh preprocess.sh && autoreconf -ivf && CFLAGS="$(CFLAGS)" CPPFLAGS="-I$(LUA_INCDIR)" LIBFLAG="$(LIBFLAG)" OBJ_EXTENSION="$(OBJ_EXTENSION)" LIB_EXTENSION="$(LIB_EXTENSION)" LIBDIR="$(LIBDIR)" CONFDIR="$(CONFDIR)" ./configure && make clean && make
-    ]],
-    install_command = [[
-        make install
-    ]]
+external_dependencies = {
+    LIBTLS = {
+        header = "tls.h",
+    }
 }
-
+build = {
+    type = "builtin",
+    modules = {
+        ['libtls'] = {
+            sources = { "src/libtls.c" },
+            libraries = { "tls" },
+            incdirs = {
+                "deps/lauxhlib",
+                "deps/lua-iovec/src",
+                "$(LIBTLS_INCDIR)"
+            },
+            libdirs = {
+                "$(LIBTLS_LIBDIR)"
+            }
+        },
+        ['libtls.config'] = {
+            sources = { "src/config.c" },
+            libraries = { "tls" },
+            incdirs = {
+                "deps/lauxhlib",
+                "deps/lua-iovec/src",
+                "$(LIBTLS_INCDIR)"
+            },
+            libdirs = {
+                "$(LIBTLS_LIBDIR)"
+            }
+        }
+    }
+}
