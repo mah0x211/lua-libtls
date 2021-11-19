@@ -249,25 +249,6 @@ writes message to the socket.
 **NOTE:** all return values will be nil if closed by peer.
 
 
-### len, err, again, want = ctx:writev( iov [, offset] )
-
-send iovec messages at once.
-
-**Parameters**
-
-- `iov:iovec`: instance of [iovec](https://github.com/mah0x211/lua-iovec).
-- `offset:numbger`: offset at which the output operation is to be performed.
-
-**Returns**
-
-- `len:number`: the number of bytes sent.
-- `err:string`: error string.
-- `again:bool`: true if all data has not been sent.
-- `want:number`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
-
-**NOTE:** all return values will be nil if closed by peer.
-
-
 ### len, err, again, want = ctx:sendfile( fd, bytes [, offset] )
 
 send a file to the socket

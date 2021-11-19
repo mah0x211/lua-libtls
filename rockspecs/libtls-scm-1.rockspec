@@ -26,7 +26,6 @@ build = {
             libraries = { "tls" },
             incdirs = {
                 "deps/lauxhlib",
-                "deps/lua-iovec/src",
                 "$(LIBTLS_INCDIR)"
             },
             libdirs = {
@@ -38,7 +37,6 @@ build = {
             libraries = { "tls" },
             incdirs = {
                 "deps/lauxhlib",
-                "deps/lua-iovec/src",
                 "$(LIBTLS_INCDIR)"
             },
             libdirs = {

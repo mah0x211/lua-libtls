@@ -28,7 +28,6 @@
 #define libtls_lua_h
 
 #include "lauxhlib.h"
-#include "lua_iovec.h"
 #include "tls.h"
 #include <errno.h>
 #include <stdlib.h>
@@ -46,24 +45,24 @@ static inline int tostring_mt(lua_State *L, const char *tname)
 static inline void libtls_newmetatable(lua_State *L, const char *tname,
                                        struct luaL_Reg mm[], luaL_Reg m[])
 {
-    struct luaL_Reg *ptr = mm;
-
     // register metatable
-    luaL_newmetatable(L, tname);
-    while (ptr->name) {
-        lauxh_pushfn2tbl(L, ptr->name, ptr->func);
-        ptr++;
+    if (luaL_newmetatable(L, tname)) {
+        struct luaL_Reg *ptr = mm;
+        while (ptr->name) {
+            lauxh_pushfn2tbl(L, ptr->name, ptr->func);
+            ptr++;
+        }
+        // push methods into __index table
+        lua_pushstring(L, "__index");
+        lua_newtable(L);
+        ptr = m;
+        while (ptr->name) {
+            lauxh_pushfn2tbl(L, ptr->name, ptr->func);
+            ptr++;
+        }
+        lua_rawset(L, -3);
+        lua_pop(L, 1);
     }
-    // push methods into __index table
-    lua_pushstring(L, "__index");
-    lua_newtable(L);
-    ptr = m;
-    while (ptr->name) {
-        lauxh_pushfn2tbl(L, ptr->name, ptr->func);
-        ptr++;
-    }
-    lua_rawset(L, -3);
-    lua_pop(L, 1);
 }
 
 // define module names

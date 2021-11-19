@@ -471,75 +471,6 @@ static int write_lua(lua_State *L)
     }
 }
 
-static int writev_lua(lua_State *L)
-{
-    ltls_t *tls       = lauxh_checkudata(L, 1, LIBTLS_MT);
-    lua_iovec_t *iov  = lauxh_checkudata(L, 2, IOVEC_MT);
-    uint64_t offset   = lauxh_optuint64(L, 3, 0);
-    struct iovec *vec = iov->data;
-    int nvec          = iov->used;
-    struct iovec src  = *vec;
-    size_t len        = iov->bytes - offset;
-    size_t sent       = 0;
-    int idx           = 0;
-
-    if (offset >= iov->bytes) {
-        src             = vec[0];
-        vec[0].iov_base = NULL;
-        vec[0].iov_len  = 0;
-        nvec            = 1;
-    } else if (offset) {
-        for (; idx < iov->used; idx++) {
-            if (vec[0].iov_len > offset) {
-                src = vec[0];
-                vec[0].iov_base += offset;
-                vec[0].iov_len -= offset;
-                idx = 0;
-                break;
-            }
-            offset -= vec[0].iov_len;
-            vec++;
-            nvec--;
-        }
-    }
-
-    for (; idx < nvec; idx++) {
-        ssize_t rv = tls_write(tls->ctx, vec[idx].iov_base, vec[idx].iov_len);
-
-        switch (rv) {
-        // got error
-        case -1:
-            *vec = src;
-            // closed by peer
-            if (errno == EPIPE || errno == ECONNRESET) {
-                return 0;
-            }
-            // got error
-            lua_pushnil(L);
-            push_tls_error(L, tls);
-            return 2;
-
-        case TLS_WANT_POLLIN:
-        case TLS_WANT_POLLOUT:
-            *vec = src;
-            lua_pushinteger(L, sent);
-            lua_pushnil(L);
-            lua_pushboolean(L, 1);
-            lua_pushinteger(L, rv);
-            return 4;
-
-        default:
-            sent += (size_t)rv;
-        }
-    }
-
-    *vec = src;
-    lua_pushinteger(L, sent);
-    lua_pushnil(L);
-    lua_pushboolean(L, len - sent);
-    return 3;
-}
-
 static int read_lua(lua_State *L)
 {
     ltls_t *tls = lauxh_checkudata(L, 1, LIBTLS_MT);
@@ -773,7 +704,6 @@ LUALIB_API int luaopen_libtls(lua_State *L)
         {"connect_socket",            connect_socket_lua           },
         {"handshake",                 handshake_lua                },
         {"read",                      read_lua                     },
-        {"writev",                    writev_lua                   },
         {"write",                     write_lua                    },
         {"sendfile",                  sendfile_lua                 },
         {"close",                     close_lua                    },
