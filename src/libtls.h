@@ -36,12 +36,11 @@
 #include <string.h>
 #include <unistd.h>
 
-#define TOSTRING_MT(L, tname)                                                  \
- (                                                                             \
-     {                                                                         \
-lua_pushfstring(L, tname ": %p", lua_touserdata(L, 1));                        \
-1;                                                                             \
-     })
+static inline int tostring_mt(lua_State *L, const char *tname)
+{
+    lua_pushfstring(L, "%s: %p", tname, lua_touserdata(L, 1));
+    return 1;
+}
 
 // helper functions
 

@@ -567,7 +567,7 @@ static int add_keypair_file_lua(lua_State *L)
 
 static int tostring_lua(lua_State *L)
 {
-    return TOSTRING_MT(L, LIBTLS_CONFIG_MT);
+    return tostring_mt(L, LIBTLS_CONFIG_MT);
 }
 
 static int gc_lua(lua_State *L)
