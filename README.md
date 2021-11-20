@@ -125,8 +125,8 @@ creates a new client context suitable for reading and writing on an existing pai
 
 **Params**
 
-- `fdr:number`: fd for read.
-- `fdw:number`: fd for write.
+- `fdr:integer`: fd for read.
+- `fdw:integer`: fd for write.
 
 **Returns**
 
@@ -140,7 +140,7 @@ creates a new context suitable for reading and writing on an already established
 
 **Params**
 
-- `fd:number`: already established socket descriptor.
+- `fd:integer`: already established socket descriptor.
 
 **Returns**
 
@@ -183,8 +183,8 @@ connects a client context to a pair of existing file descriptors.
 
 **Params**
 
-- `fdr:number`: fd for read.
-- `fdw:number`: fd for write.
+- `fdr:integer`: fd for read.
+- `fdw:integer`: fd for write.
 - `servername:string`:  server name.
 
 **Returns**
@@ -215,7 +215,7 @@ connects a client context to an already established socket connection.
 
 **Params**
 
-- `fd:number`: already established socket descriptor.
+- `fd:integer`: already established socket descriptor.
 - `servername:string`: server name.
 
 **Returns**
@@ -230,14 +230,14 @@ reads bufsize bytes of data from the socket.
 
 **Params**
 
-- `bufsize:number`: working buffer size of receive operation. (default: `BUFSIZ` that size of `stdio.h` buffers)
+- `bufsize:integer`: working buffer size of receive operation. (default: `BUFSIZ` that size of `stdio.h` buffers)
 
 **Returns**
 
 - `msg:string`: received message string.
 - `err:string`: error string.
 - `again:boolean`: true if got a `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`.
-- `want:number`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
+- `want:integer`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
 
 **NOTE:** all return values will be nil if closed by peer.
 
@@ -252,10 +252,10 @@ writes message to the socket.
 
 **Returns**
 
-- `len:number`: the number of bytes write.
+- `len:integer`: the number of bytes write.
 - `err:string`: error string.
 - `again:bool`: true if all data has not been sent.
-- `want:number`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
+- `want:integer`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
 
 
 **NOTE:** all return values will be nil if closed by peer.
@@ -273,10 +273,10 @@ send a file to the socket
 
 **Returns**
 
-- `len:number`: number of bytes sent.
+- `len:integer`: number of bytes sent.
 - `err:string`: error string.
 - `again:boolean`: true if len != bytes, or errno is EAGAIN, EWOULDBLOCK or EINTR.
-- `want:number`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
+- `want:integer`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
 
 **NOTE:** all return values will be nil if closed by peer.
 
@@ -310,7 +310,7 @@ returns the OCSP certificate status code as per RFC 6960 section 2.2.
 
 **Returns**
 
-- `status:number`: [OCSP certificate status code constants](#ocsp-certificate-status-code), or nil on error.
+- `status:integer`: [OCSP certificate status code constants](#ocsp-certificate-status-code), or nil on error.
 - `err:string`: error string.
 
 
@@ -320,7 +320,7 @@ returns the OCSP certificate revocation reason status code as per RFC 5280 secti
 
 **Returns**
 
-- `reason:number`: [CTL reason status code constants](#ctl-reason-status-code), or nil on error.
+- `reason:integer`: [CTL reason status code constants](#ctl-reason-status-code), or nil on error.
 - `err:string`: error string.
 
 
@@ -330,7 +330,7 @@ returns the OCSP next update time.
 
 **Returns**
 
-- `epoch:number`: a time in epoch-seconds on success or nil on error.
+- `epoch:integer`: a time in epoch-seconds on success or nil on error.
 - `err:string`: error string.
 
 
@@ -340,7 +340,7 @@ returns the OCSP response status as per RFC 6960 section 2.3.
 
 **Returns**
 
-- `statis:number`: [OCSP response status code](#ocsp-response-status-code), or nil on error.
+- `statuss:integer`: [OCSP response status code](#ocsp-response-status-code), or nil on error.
 - `err:string`: error string.
 
 
@@ -360,7 +360,7 @@ returns the OCSP revocation time.
 
 **Returns**
 
-- `epoch:number`: a time in epoch-seconds on success or nil on error.
+- `epoch:integer`: a time in epoch-seconds on success or nil on error.
 - `err:string`: error string.
 
 
@@ -370,7 +370,7 @@ returns the OCSP this update time.
 
 **Returns**
 
-- `epoch:number`: a time in epoch-seconds on success or nil on error.
+- `epoch:integer`: a time in epoch-seconds on success or nil on error.
 - `err:string`: error string.
 
 
@@ -412,7 +412,7 @@ It is only necessary to call this function if you need to guarantee that the han
 
 - `ok:boolean`: true on success.
 - `err:string`: error message.
-- `want:number`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
+- `want:integer`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
 
 
 ### ok = ctx:peer_cert_provided()
@@ -480,7 +480,7 @@ this method will only succeed after the handshake is complete.
 
 **Returns**
 
-- `period:number`: start of the validity period.
+- `period:integer`: start of the validity period.
 
 
 ### period = ctx:peer_cert_notafter()
@@ -491,7 +491,7 @@ this method will only succeed after the handshake is complete.
 
 **Returns**
 
-- `period:number`: end of the validity period.
+- `period:integer`: end of the validity period.
 
 
 ### pem, err = ctx:peer_cert_chain_pem()
@@ -1005,7 +1005,7 @@ sets the lifetime to be used for TLS sessions. Session support is disabled if a 
 
 **Params**
 
-- `lifetime:number`: session lifetime. (default `0`)
+- `lifetime:integer`: session lifetime. (default `0`)
 
 **Returns**
 
@@ -1019,7 +1019,7 @@ adds a key used for the encryption and authentication of TLS tickets. By default
 
 **Params**
 
-- `keyrev:number`: revision number of key.
+- `keyrev:integer`: revision number of key.
 - `key:string`: key string.
 
 **Returns**
@@ -1044,7 +1044,7 @@ If the file has a non-zero length, the client will attempt to read session data 
 
 **Params**
 
-- `fd:number`: file descriptor.
+- `fd:integer`: file descriptor.
 
 **Returns**
 
@@ -1073,7 +1073,7 @@ sets the maximum depth for the certificate chain verification that shall be allo
 
 **Params**
 
-- `depth:number`: maximum depth for the certificate chain verification.
+- `depth:integer`: maximum depth for the certificate chain verification.
 
 **Returns**
 
