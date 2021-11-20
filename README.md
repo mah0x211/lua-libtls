@@ -261,15 +261,15 @@ writes message to the socket.
 **NOTE:** all return values will be nil if closed by peer.
 
 
-### len, err, again, want = ctx:sendfile( fd, bytes [, offset] )
+### len, err, again, want = ctx:sendfile( f, bytes [, offset] )
 
 send a file to the socket
 
 **Parameters**
 
-- `fd:number`: file descriptor.
-- `bytes:number`: how many bytes of the file should be sent.
-- `offset:number`: specifies where to begin in the file (default 0).
+- `f:integer|file`: file descriptor or lua file handle.
+- `bytes:integer`: how many bytes of the file should be sent.
+- `offset:integer`: specifies where to begin in the file (default 0).
 
 **Returns**
 
