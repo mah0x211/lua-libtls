@@ -367,10 +367,19 @@ static int close_lua(lua_State *L)
     return 1;
 }
 
+static inline int checkfile(lua_State *L, int idx)
+{
+    if (!lauxh_isinteger(L, idx)) {
+        FILE *fp = lauxh_checkfile(L, idx);
+        return fileno(fp);
+    }
+    return lua_tointeger(L, idx);
+}
+
 static int sendfile_lua(lua_State *L)
 {
     ltls_t *tls        = lauxh_checkudata(L, 1, LIBTLS_MT);
-    lua_Integer fd     = lauxh_checkinteger(L, 2);
+    int fd             = checkfile(L, 2);
     lua_Integer len    = lauxh_checkinteger(L, 3);
     lua_Integer offset = (off_t)lauxh_optinteger(L, 4, 0);
     char *buf          = NULL;
