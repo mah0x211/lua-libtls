@@ -385,84 +385,6 @@ static inline int checkfile(lua_State *L, int idx)
     return lua_tointeger(L, idx);
 }
 
-static int sendfile_lua(lua_State *L)
-{
-    ltls_t *tls        = lauxh_checkudata(L, 1, LIBTLS_MT);
-    int fd             = checkfile(L, 2);
-    lua_Integer len    = lauxh_checkinteger(L, 3);
-    lua_Integer offset = (off_t)lauxh_optinteger(L, 4, 0);
-    char *buf          = NULL;
-    ssize_t rv         = 0;
-
-    // invalid length
-    if (len < 1) {
-        lua_pushnil(L);
-        lua_pushstring(L, strerror(EINVAL));
-        return 2;
-    }
-    // mem-error
-    else if (!(buf = malloc(sizeof(char) * len))) {
-        lua_pushnil(L);
-        lua_pushstring(L, strerror(errno));
-        return 2;
-    }
-
-    // read data from file
-    len = pread(fd, buf, (size_t)len, (off_t)offset);
-    // reached to end-of-file
-    if (!len) {
-        free(buf);
-        lua_pushinteger(L, 0);
-        return 1;
-    }
-    // got error
-    else if (len == -1) {
-        free(buf);
-        // again
-        if (errno == EAGAIN || errno == EINTR) {
-            lua_pushinteger(L, 0);
-            lua_pushnil(L);
-            lua_pushboolean(L, 1);
-            return 3;
-        }
-
-        // got error
-        lua_pushnil(L);
-        lua_pushstring(L, strerror(errno));
-
-        return 2;
-    }
-
-    rv = tls_write(tls->ctx, buf, len);
-    free(buf);
-    switch (rv) {
-    // closed by peer
-    case 0:
-        return 0;
-
-    // got error
-    case -1:
-        lua_pushnil(L);
-        push_tls_error(L, tls);
-        return 2;
-
-    // again
-    case TLS_WANT_POLLIN:
-    case TLS_WANT_POLLOUT:
-        lua_pushinteger(L, 0);
-        lua_pushnil(L);
-        lua_pushboolean(L, 1);
-        lua_pushinteger(L, rv);
-        return 4;
-
-    default:
-        lua_pushinteger(L, rv);
-        lua_pushnil(L);
-        lua_pushboolean(L, len - rv);
-        return 3;
-    }
-}
-
 static int write_lua(lua_State *L)
 {
     ltls_t *tls     = lauxh_checkudata(L, 1, LIBTLS_MT);
@@ -744,7 +666,6 @@ LUALIB_API int luaopen_libtls(lua_State *L)
 
         {"read",                      read_lua                     },
         {"write",                     write_lua                    },
-        {"sendfile",                  sendfile_lua                 },
         {"close",                     close_lua                    },
 
         {"peer_cert_provided",        peer_cert_provided_lua       },
