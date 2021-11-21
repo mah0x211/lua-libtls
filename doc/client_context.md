@@ -126,26 +126,6 @@ writes message to the socket.
 **NOTE:** all return values will be nil if closed by peer.
 
 
-## len, err, again, want = ctx:sendfile( f, bytes [, offset] )
-
-send a file to the socket
-
-**Parameters**
-
-- `f:integer|file`: file descriptor or lua file handle.
-- `bytes:integer`: how many bytes of the file should be sent.
-- `offset:integer`: specifies where to begin in the file (default 0).
-
-**Returns**
-
-- `len:integer`: number of bytes sent.
-- `err:string`: error string.
-- `again:boolean`: `true` if len != bytes, or errno is EAGAIN, EWOULDBLOCK or EINTR.
-- `want:integer`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](constants.md#required-file-descriptor-states))
-
-**NOTE:** all return values will be nil if closed by peer.
-
-
 ## ok = ctx:conn_session_resumed()
 
 indicates whether a TLS session has been resumed during the handshake with the server connected to ctx.
