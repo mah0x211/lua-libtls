@@ -392,7 +392,7 @@ returns the URL for OCSP validation of the peer certificate from ctx.
 reset the TLS context that allowing for it to be reused.
 
 
-### ok, err = ctx:close()
+### ok, err, want = ctx:close()
 
 closes a connection after use.
 Only the TLS layer will be shut down and the caller is responsible for closing the file descriptors, unless the connection was established using `ctx:connect()` or `ctx:connect_servername()`.
@@ -401,6 +401,7 @@ Only the TLS layer will be shut down and the caller is responsible for closing t
 
 - `ok:boolean`: true on success.
 - `err:string`: error message.
+- `want:integer`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](#required-file-descriptor-states))
 
 
 ### ok, err, want = ctx:handshake()

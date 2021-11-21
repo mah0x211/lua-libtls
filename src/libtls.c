@@ -355,16 +355,25 @@ static int peer_cert_provided_lua(lua_State *L)
 static int close_lua(lua_State *L)
 {
     ltls_t *tls = lauxh_checkudata(L, 1, LIBTLS_MT);
+    int rv      = tls_close(tls->ctx);
 
-    if (tls_close(tls->ctx)) {
+    switch (rv) {
+    case 0:
+        lua_pushboolean(L, 1);
+        return 1;
+
+    case TLS_WANT_POLLIN:
+    case TLS_WANT_POLLOUT:
+        lua_pushboolean(L, 0);
+        lua_pushnil(L);
+        lua_pushinteger(L, rv);
+        return 3;
+
+    default:
         lua_pushboolean(L, 0);
         push_tls_error(L, tls);
         return 2;
     }
-
-    lua_pushboolean(L, 1);
-
-    return 1;
 }
 
 static inline int checkfile(lua_State *L, int idx)
