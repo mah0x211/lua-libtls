@@ -12,6 +12,7 @@ description = {
 }
 dependencies = {
     "lua >= 5.1",
+    "lauxhlib >= 0.3.1",
 }
 external_dependencies = {
     LIBTLS = {
@@ -25,7 +26,6 @@ build = {
             sources = { "src/libtls.c" },
             libraries = { "tls" },
             incdirs = {
-                "deps/lauxhlib",
                 "$(LIBTLS_INCDIR)"
             },
             libdirs = {
@@ -36,7 +36,6 @@ build = {
             sources = { "src/config.c" },
             libraries = { "tls" },
             incdirs = {
-                "deps/lauxhlib",
                 "$(LIBTLS_INCDIR)"
             },
             libdirs = {

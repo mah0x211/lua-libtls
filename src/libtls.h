@@ -27,12 +27,13 @@
 #ifndef libtls_lua_h
 #define libtls_lua_h
 
-#include "lauxhlib.h"
-#include "tls.h"
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+// lua
+#include "tls.h"
+#include <lauxhlib.h>
 
 static inline int tostring_mt(lua_State *L, const char *tname)
 {
