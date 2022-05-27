@@ -25,7 +25,7 @@ If the file has a non-zero length, the client will attempt to read session data 
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## cfg:insecure_noverifyname()
@@ -54,4 +54,4 @@ sets the maximum depth for the certificate chain verification that shall be allo
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.

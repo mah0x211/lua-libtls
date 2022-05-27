@@ -59,7 +59,7 @@ loads a certificate or key from disk into memory to be loaded with `config:set_c
 **Returns**
 
 - `data:string`: loaded certificate or key data.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## cfg, err = config.new()
@@ -69,7 +69,7 @@ allocates a new default configuration object
 **Returns**
 
 - `cfg:libtls.config`: a configuration object.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_alpn( alpn )
@@ -83,7 +83,7 @@ sets the ALPN protocols that are supported. The alpn string is a comma separated
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_ca_file( file )
@@ -97,7 +97,7 @@ sets the filename used to load a file containing the root certificates.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_ca_path( path )
@@ -111,7 +111,7 @@ sets the path (directory) which should be searched for root certificates.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_ca( ca )
@@ -125,7 +125,7 @@ sets the root certificates directly from memory.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_cert_file( file )
@@ -139,7 +139,7 @@ sets file from which the public certificate will be read.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_cert( cert )
@@ -153,7 +153,7 @@ sets the public certificate directly from memory.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_ciphers( ciphers )
@@ -172,7 +172,7 @@ sets the list of ciphers that may be used.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_crl_file( file )
@@ -186,7 +186,7 @@ sets the filename used to load a file containing the Certificate Revocation List
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_crl( crl )
@@ -200,7 +200,7 @@ sets the CRL directly from memory.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_key_file( file )
@@ -214,7 +214,7 @@ sets the file from which the private key will be read.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_key( key )
@@ -228,7 +228,7 @@ directly sets the private key from memory.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_keypair_file( certfile, keyfile [, staplefile] )
@@ -244,7 +244,7 @@ sets the files from which the public certificate, private key, and DER encoded O
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_keypair( cert, key [, staple]  )
@@ -261,7 +261,7 @@ directly sets the public certificate, private key, and DER encoded OCSP staple f
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_ocsp_staple( staple )
@@ -275,7 +275,7 @@ sets a DER-encoded OCSP response to be stapled during the TLS handshake from mem
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_ocsp_staple_file( staplefile )
@@ -289,7 +289,7 @@ sets a DER-encoded OCSP response to be stapled during the TLS handshake from the
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_protocols( protocol, ... )
@@ -303,7 +303,7 @@ sets which versions of the protocol may be used.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## cfg:insecure_noverifycert()

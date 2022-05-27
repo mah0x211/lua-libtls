@@ -23,7 +23,7 @@ Only the TLS layer will be shut down and the caller is responsible for closing t
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:object`: error object.
 - `want:integer`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](constants.md#required-file-descriptor-states))
 
 
@@ -35,7 +35,7 @@ It is only necessary to call this function if you need to guarantee that the han
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:object`: error object.
 - `want:integer`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](constants.md#required-file-descriptor-states))
 
 
@@ -125,7 +125,7 @@ returns a PEM-encoded certificate chain for the peer certificate from ctx.
 **Returns**
 
 - `pem:string`: PEM-encoded cert chain data.
-- `err:string`: error message.
+- `err:object`: error object.
 
 
 ## ver = ctx:conn_version()

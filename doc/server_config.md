@@ -21,7 +21,7 @@ adds an additional public certificate, private key, and DER encoded OCSP staple 
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:add_keypair( cert, key [, staple] )
@@ -37,7 +37,7 @@ adds an additional public certificate, private key, and DER encoded OCSP staple 
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## cfg:prefer_ciphers_client()
@@ -64,7 +64,7 @@ Tune the dheparams.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_ecdhecurve( name )
@@ -84,7 +84,7 @@ openssl ecparam -list_curves
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_ecdhecurves( names )
@@ -108,7 +108,7 @@ openssl ecparam -list_curves
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_session_id( sid )
@@ -122,7 +122,7 @@ sets the session identifier that will be used by the TLS server when sessions ar
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:set_session_lifetime( lifetime )
@@ -136,7 +136,7 @@ sets the lifetime to be used for TLS sessions. Session support is disabled if a 
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 
 
 ## ok, err = cfg:add_ticket_key( keyrev, key )
@@ -151,5 +151,5 @@ adds a key used for the encryption and authentication of TLS tickets. By default
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:error`: error object.
 

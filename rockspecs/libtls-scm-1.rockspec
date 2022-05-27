@@ -1,4 +1,3 @@
-rockspec_format = "3.0"
 package = "libtls"
 version = "scm-1"
 source = {
@@ -12,35 +11,44 @@ description = {
 }
 dependencies = {
     "lua >= 5.1",
+    "error >= 0.8.0",
     "lauxhlib >= 0.3.1",
 }
 external_dependencies = {
     LIBTLS = {
         header = "tls.h",
-    }
+    },
 }
 build = {
     type = "builtin",
     modules = {
-        ['libtls'] = {
-            sources = { "src/libtls.c" },
-            libraries = { "tls" },
+        libtls = {
+            sources = {
+                "src/libtls.c",
+            },
+            libraries = {
+                "tls",
+            },
             incdirs = {
-                "$(LIBTLS_INCDIR)"
+                "$(LIBTLS_INCDIR)",
             },
             libdirs = {
-                "$(LIBTLS_LIBDIR)"
-            }
+                "$(LIBTLS_LIBDIR)",
+            },
         },
-        ['libtls.config'] = {
-            sources = { "src/config.c" },
-            libraries = { "tls" },
+        ["libtls.config"] = {
+            sources = {
+                "src/config.c",
+            },
+            libraries = {
+                "tls",
+            },
             incdirs = {
-                "$(LIBTLS_INCDIR)"
+                "$(LIBTLS_INCDIR)",
             },
             libdirs = {
-                "$(LIBTLS_LIBDIR)"
-            }
-        }
-    }
+                "$(LIBTLS_LIBDIR)",
+            },
+        },
+    },
 }

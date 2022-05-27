@@ -11,7 +11,7 @@ creates a new TLS context for client connections.
 **Returns**
 
 - `ctx:libtls`: client context.
-- `err:string`: error message.
+- `err:object`: error object.
 
 
 ```lua
@@ -39,7 +39,7 @@ connects a client context to the server named by host. if port is `nil` then a `
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:object`: error object.
 
 
 ## ok, err = ctx:connect_fds( fdr, fdw [, servername] )
@@ -55,7 +55,7 @@ connects a client context to a pair of existing file descriptors.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:object`: error object.
 
 
 ## ok, err = ctx:connect_servername( host [, port [, servername]] )
@@ -71,7 +71,7 @@ the same behaviour as a ctxconnect. however the name to use for verification is 
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:object`: error object.
 
 
 ## ok, err = ctx:connect_socket( fd [, servername] )
@@ -86,7 +86,7 @@ connects a client context to an already established socket connection.
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error message.
+- `err:object`: error object.
 
 
 ## len, err, again, want = ctx:read( [bufsize] )
@@ -100,7 +100,7 @@ reads bufsize bytes of data from the socket.
 **Returns**
 
 - `msg:string`: received message string.
-- `err:string`: error string.
+- `err:object`: error object.
 - `again:boolean`: `true` if got a `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`.
 - `want:integer`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](constants.md#required-file-descriptor-states))
 
@@ -118,7 +118,7 @@ writes message to the socket.
 **Returns**
 
 - `len:integer`: the number of bytes write.
-- `err:string`: error string.
+- `err:object`: error object.
 - `again:bool`: `true` if all data has not been sent.
 - `want:integer`: socket descriptor states required to be `TLS_WANT_POLLIN` or `TLS_WANT_POLLOUT`. (pleese see: [Required file descriptor states](constants.md#required-file-descriptor-states))
 
@@ -146,7 +146,7 @@ processes a raw OCSP response in response of size size to check the revocation s
 **Returns**
 
 - `ok:boolean`: `true` on success.
-- `err:string`: error string.
+- `err:object`: error object.
 
 
 ## status, err = ctx:peer_ocsp_cert_status()
@@ -156,7 +156,7 @@ returns the OCSP certificate status code as per RFC 6960 section 2.2.
 **Returns**
 
 - `status:integer`: [OCSP certificate status code constants](constants.md#ocsp-certificate-status-code), or nil on error.
-- `err:string`: error string.
+- `err:object`: error object.
 
 
 ## status, err = ctx:peer_ocsp_crl_reason()
@@ -166,7 +166,7 @@ returns the OCSP certificate revocation reason status code as per RFC 5280 secti
 **Returns**
 
 - `reason:integer`: [CTL reason status code constants](constants.md#ctl-reason-status-code), or nil on error.
-- `err:string`: error string.
+- `err:object`: error object.
 
 
 ## epoch, err = ctx:peer_ocsp_next_update()
@@ -176,7 +176,7 @@ returns the OCSP next update time.
 **Returns**
 
 - `epoch:integer`: a time in epoch-seconds on success or nil on error.
-- `err:string`: error string.
+- `err:object`: error object.
 
 
 ## status, err = ctx:peer_ocsp_response_status()
@@ -186,7 +186,7 @@ returns the OCSP response status as per RFC 6960 section 2.3.
 **Returns**
 
 - `statuss:integer`: [OCSP response status code](constants.md#ocsp-response-status-code), or nil on error.
-- `err:string`: error string.
+- `err:object`: error object.
 
 
 ## res, err = ctx:peer_ocsp_result()
@@ -196,7 +196,7 @@ returns the message string of OCSP response status, OCSP certificate status or O
 **Returns**
 
 - `res:string`: message string or nil on error.
-- `err:string`: error string.
+- `err:object`: error object.
 
 
 ## epoch, err = ctx:peer_ocsp_revocation_time()
@@ -206,7 +206,7 @@ returns the OCSP revocation time.
 **Returns**
 
 - `epoch:integer`: a time in epoch-seconds on success or nil on error.
-- `err:string`: error string.
+- `err:object`: error object.
 
 
 ## epoch, err = ctx:peer_ocsp_this_update()
@@ -216,7 +216,7 @@ returns the OCSP this update time.
 **Returns**
 
 - `epoch:integer`: a time in epoch-seconds on success or nil on error.
-- `err:string`: error string.
+- `err:object`: error object.
 
 
 ## url, err = ctx:peer_ocsp_url()
@@ -226,5 +226,5 @@ returns the URL for OCSP validation of the peer certificate from ctx.
 **Returns**
 
 - `url:string`: url string.
-- `err:string`: error string.
+- `err:object`: error object.
 

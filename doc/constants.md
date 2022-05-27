@@ -5,6 +5,11 @@
 
 ## Constants of libtls module
 
+### Error Type
+
+- `ERROR`: `libtls.ERROR` error type object that created by https://github.com/mah0x211/lua-error
+
+
 ### Required file descriptor states
 
 - `WANT_POLLIN`: The underlying read file descriptor needs to be readable in order to continue.
