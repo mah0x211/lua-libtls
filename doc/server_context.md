@@ -11,7 +11,7 @@ creates a new TLS context for server connections.
 **Returns**
 
 - `ctx:libtls`: server context.
-- `err:string`: error message.
+- `err:object`: error object.
 
 
 ```lua
@@ -38,7 +38,7 @@ creates a new client context suitable for reading and writing on an existing pai
 **Returns**
 
 - `client:libtls`: TLS context for client connection.
-- `err:string`: error message.
+- `err:object`: error object.
 
 
 ## client, err = ctx:accept_socket( fd )
@@ -52,7 +52,7 @@ creates a new context suitable for reading and writing on an already established
 **Returns**
 
 - `client:libtls`: TLS context for client connection.
-- `err:string`: error message.
+- `err:object`: error object.
 
 
 ## name = ctx:conn_servername()

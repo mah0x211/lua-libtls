@@ -33,9 +33,53 @@
 #include <unistd.h>
 // lua
 #include "tls.h"
-#include <lauxhlib.h>
+#include <lua_error.h>
 
-static inline int tostring_mt(lua_State *L, const char *tname)
+static inline void libtls_error_init(lua_State *L)
+{
+    int top = lua_gettop(L);
+
+    if (!le_registry_get(L, "libtls.ERROR")) {
+        // register libtls.ERROR type
+        lua_pushliteral(L, "libtls.ERROR");
+        lua_pushinteger(L, -1);
+        lua_pushliteral(L, "Operation failure");
+        le_new_type(L, top + 1);
+    }
+}
+
+static inline void libtls_new_error(lua_State *L, const char *op,
+                                    const char *msg)
+{
+    int top = lua_gettop(L);
+
+    le_registry_get(L, "libtls.ERROR");
+    if (msg || op) {
+        if (msg) {
+            lua_pushstring(L, msg);
+        } else {
+            lua_pushnil(L);
+        }
+        if (op) {
+            lua_pushstring(L, op);
+        } else {
+            lua_pushnil(L);
+        }
+        le_new_message(L, top + 2);
+    }
+    le_new_typed_error(L, top + 1);
+}
+
+static inline void libtls_new_error_from_errno(lua_State *L, const char *op)
+{
+    if (errno) {
+        libtls_new_error(L, op, strerror(errno));
+    } else {
+        libtls_new_error(L, op, NULL);
+    }
+}
+
+static inline int libtls_tostring_mt(lua_State *L, const char *tname)
 {
     lua_pushfstring(L, "%s: %p", tname, lua_touserdata(L, 1));
     return 1;

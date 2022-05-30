@@ -26,149 +26,162 @@
 
 #include "libtls.h"
 
-static inline void push_tls_error(lua_State *L, ltls_t *tls)
+static inline void push_tls_error(lua_State *L, const char *op, ltls_t *tls)
 {
-    const char *errstr = tls_error(tls->ctx);
-    if (errstr) {
-        lua_pushstring(L, errstr);
+    const char *errmsg = tls_error(tls->ctx);
+
+    if (errmsg) {
+        libtls_new_error(L, op, errmsg);
     } else {
-        lua_pushstring(L, strerror(errno));
+        libtls_new_error_from_errno(L, op);
     }
+}
+
+static inline int push_bool_result(lua_State *L, const char *op, ltls_t *tls,
+                                   int rv)
+{
+    if (rv != 0) {
+        lua_pushboolean(L, 0);
+        push_tls_error(L, op, tls);
+        return 2;
+    }
+    lua_pushboolean(L, 1);
+    return 1;
 }
 
 static int peer_ocsp_url_lua(lua_State *L)
 {
     ltls_t *tls   = lauxh_checkudata(L, 1, LIBTLS_MT);
-    const char *s = tls_peer_ocsp_url(tls->ctx);
+    const char *s = NULL;
 
+    errno = 0;
+    s     = tls_peer_ocsp_url(tls->ctx);
     if (s) {
         lua_pushstring(L, s);
         return 1;
     }
-
     // got error
     lua_pushnil(L);
-    push_tls_error(L, tls);
-
+    push_tls_error(L, "peer_ocsp_url", tls);
     return 2;
 }
 
 static int peer_ocsp_this_update_lua(lua_State *L)
 {
     ltls_t *tls = lauxh_checkudata(L, 1, LIBTLS_MT);
-    time_t t    = tls_peer_ocsp_this_update(tls->ctx);
+    time_t t    = 0;
 
+    errno = 0;
+    t     = tls_peer_ocsp_this_update(tls->ctx);
     if (t != -1) {
         lua_pushinteger(L, t);
         return 1;
     }
-
     // got error
     lua_pushnil(L);
-    push_tls_error(L, tls);
-
+    push_tls_error(L, "peer_ocsp_this_update", tls);
     return 2;
 }
 
 static int peer_ocsp_revocation_time_lua(lua_State *L)
 {
     ltls_t *tls = lauxh_checkudata(L, 1, LIBTLS_MT);
-    time_t t    = tls_peer_ocsp_revocation_time(tls->ctx);
+    time_t t    = 0;
 
+    errno = 0;
+    t     = tls_peer_ocsp_revocation_time(tls->ctx);
     if (t != -1) {
         lua_pushinteger(L, t);
         return 1;
     }
-
     // got error
     lua_pushnil(L);
-    push_tls_error(L, tls);
-
+    push_tls_error(L, "peer_ocsp_revocation_time", tls);
     return 2;
 }
 
 static int peer_ocsp_result_lua(lua_State *L)
 {
     ltls_t *tls   = lauxh_checkudata(L, 1, LIBTLS_MT);
-    const char *s = tls_peer_ocsp_result(tls->ctx);
+    const char *s = NULL;
 
+    errno = 0;
+    s     = tls_peer_ocsp_result(tls->ctx);
     if (s) {
         lua_pushstring(L, s);
         return 1;
     }
-
     // got error
     lua_pushnil(L);
-    push_tls_error(L, tls);
-
+    push_tls_error(L, "peer_ocsp_result", tls);
     return 2;
 }
 
 static int peer_ocsp_response_status_lua(lua_State *L)
 {
     ltls_t *tls = lauxh_checkudata(L, 1, LIBTLS_MT);
-    int n       = tls_peer_ocsp_response_status(tls->ctx);
+    int n       = 0;
 
+    errno = 0;
+    n     = tls_peer_ocsp_response_status(tls->ctx);
     if (n != -1) {
         lua_pushinteger(L, n);
         return 1;
     }
-
     // got error
     lua_pushnil(L);
-    push_tls_error(L, tls);
-
+    push_tls_error(L, "peer_ocsp_response_status", tls);
     return 2;
 }
 
 static int peer_ocsp_next_update_lua(lua_State *L)
 {
     ltls_t *tls = lauxh_checkudata(L, 1, LIBTLS_MT);
-    time_t t    = tls_peer_ocsp_next_update(tls->ctx);
+    time_t t    = 0;
 
+    errno = 0;
+    t     = tls_peer_ocsp_next_update(tls->ctx);
     if (t != -1) {
         lua_pushinteger(L, t);
         return 1;
     }
-
     // got error
     lua_pushnil(L);
-    push_tls_error(L, tls);
-
+    push_tls_error(L, "peer_ocsp_next_update", tls);
     return 2;
 }
 
 static int peer_ocsp_crl_reason_lua(lua_State *L)
 {
     ltls_t *tls = lauxh_checkudata(L, 1, LIBTLS_MT);
-    int n       = tls_peer_ocsp_crl_reason(tls->ctx);
+    int n       = 0;
 
+    errno = 0;
+    n     = tls_peer_ocsp_crl_reason(tls->ctx);
     if (n != -1) {
         lua_pushinteger(L, n);
         return 1;
     }
-
     // got error
     lua_pushnil(L);
-    push_tls_error(L, tls);
-
+    push_tls_error(L, "peer_ocsp_crl_reason", tls);
     return 2;
 }
 
 static int peer_ocsp_cert_status_lua(lua_State *L)
 {
     ltls_t *tls = lauxh_checkudata(L, 1, LIBTLS_MT);
-    int n       = tls_peer_ocsp_cert_status(tls->ctx);
+    int n       = 0;
 
+    errno = 0;
+    n     = tls_peer_ocsp_cert_status(tls->ctx);
     if (n != -1) {
         lua_pushinteger(L, n);
         return 1;
     }
-
     // got error
     lua_pushnil(L);
-    push_tls_error(L, tls);
-
+    push_tls_error(L, "peer_ocsp_cert_status", tls);
     return 2;
 }
 
@@ -178,15 +191,10 @@ static int ocsp_process_response_lua(lua_State *L)
     size_t len      = 0;
     const char *res = lauxh_checklstring(L, 2, &len);
 
-    if (tls_ocsp_process_response(tls->ctx, (const unsigned char *)res, len)) {
-        lua_pushboolean(L, 0);
-        push_tls_error(L, tls);
-        return 2;
-    }
-
-    lua_pushboolean(L, 1);
-
-    return 1;
+    errno = 0;
+    return push_bool_result(
+        L, "ocsp_process_response", tls,
+        tls_ocsp_process_response(tls->ctx, (const unsigned char *)res, len));
 }
 
 static int conn_version_lua(lua_State *L)
@@ -263,16 +271,16 @@ static int peer_cert_chain_pem_lua(lua_State *L)
 {
     ltls_t *tls        = lauxh_checkudata(L, 1, LIBTLS_MT);
     size_t len         = 0;
-    const uint8_t *pem = tls_peer_cert_chain_pem(tls->ctx, &len);
+    const uint8_t *pem = NULL;
 
+    errno = 0;
+    pem   = tls_peer_cert_chain_pem(tls->ctx, &len);
     if (!pem) {
         lua_pushnil(L);
-        push_tls_error(L, tls);
+        push_tls_error(L, "peer_cert_chain_pem", tls);
         return 2;
     }
-
     lua_pushlstring(L, (const char *)pem, len);
-
     return 1;
 }
 
@@ -371,18 +379,9 @@ static int close_lua(lua_State *L)
 
     default:
         lua_pushboolean(L, 0);
-        push_tls_error(L, tls);
+        push_tls_error(L, "close", tls);
         return 2;
     }
-}
-
-static inline int checkfile(lua_State *L, int idx)
-{
-    if (!lauxh_isinteger(L, idx)) {
-        FILE *fp = lauxh_checkfile(L, idx);
-        return fileno(fp);
-    }
-    return lua_tointeger(L, idx);
 }
 
 static int write_lua(lua_State *L)
@@ -400,7 +399,7 @@ static int write_lua(lua_State *L)
     // got error
     case -1:
         lua_pushnil(L);
-        push_tls_error(L, tls);
+        push_tls_error(L, "write", tls);
         return 2;
 
     // again
@@ -442,7 +441,7 @@ static int read_lua(lua_State *L)
     // got error
     case -1:
         lua_pushnil(L);
-        push_tls_error(L, tls);
+        push_tls_error(L, "read", tls);
         return 2;
 
     // again
@@ -472,7 +471,7 @@ static int handshake_lua(lua_State *L)
 
     case -1:
         lua_pushboolean(L, 0);
-        push_tls_error(L, tls);
+        push_tls_error(L, "handshake", tls);
         return 2;
 
     default:
@@ -489,15 +488,9 @@ static int connect_socket_lua(lua_State *L)
     int sock               = lauxh_checkinteger(L, 2);
     const char *servername = lauxh_optstring(L, 3, NULL);
 
-    if (tls_connect_socket(tls->ctx, sock, servername)) {
-        lua_pushboolean(L, 0);
-        push_tls_error(L, tls);
-        return 2;
-    }
-
-    lua_pushboolean(L, 1);
-
-    return 1;
+    errno = 0;
+    return push_bool_result(L, "connect_socket", tls,
+                            tls_connect_socket(tls->ctx, sock, servername));
 }
 
 static int connect_servername_lua(lua_State *L)
@@ -507,15 +500,10 @@ static int connect_servername_lua(lua_State *L)
     const char *port       = lauxh_optstring(L, 3, NULL);
     const char *servername = lauxh_optstring(L, 4, NULL);
 
-    if (tls_connect_servername(tls->ctx, host, port, servername)) {
-        lua_pushboolean(L, 0);
-        push_tls_error(L, tls);
-        return 2;
-    }
-
-    lua_pushboolean(L, 1);
-
-    return 1;
+    errno = 0;
+    return push_bool_result(
+        L, "connect_servername", tls,
+        tls_connect_servername(tls->ctx, host, port, servername));
 }
 
 static int connect_fds_lua(lua_State *L)
@@ -525,15 +513,9 @@ static int connect_fds_lua(lua_State *L)
     int fdw                = lauxh_checkinteger(L, 3);
     const char *servername = lauxh_optstring(L, 4, NULL);
 
-    if (tls_connect_fds(tls->ctx, fdr, fdw, servername)) {
-        lua_pushboolean(L, 0);
-        push_tls_error(L, tls);
-        return 2;
-    }
-
-    lua_pushboolean(L, 1);
-
-    return 1;
+    errno = 0;
+    return push_bool_result(L, "connect_fds", tls,
+                            tls_connect_fds(tls->ctx, fdr, fdw, servername));
 }
 
 static int connect_lua(lua_State *L)
@@ -542,15 +524,9 @@ static int connect_lua(lua_State *L)
     const char *host = lauxh_checkstring(L, 2);
     const char *port = lauxh_optstring(L, 3, NULL);
 
-    if (tls_connect(tls->ctx, host, port)) {
-        lua_pushboolean(L, 0);
-        push_tls_error(L, tls);
-        return 2;
-    }
-
-    lua_pushboolean(L, 1);
-
-    return 1;
+    errno = 0;
+    return push_bool_result(L, "connect", tls,
+                            tls_connect(tls->ctx, host, port));
 }
 
 static int accept_socket_lua(lua_State *L)
@@ -561,12 +537,10 @@ static int accept_socket_lua(lua_State *L)
 
     if (tls_accept_socket(tls->ctx, &c->ctx, sock)) {
         lua_pushnil(L);
-        push_tls_error(L, tls);
+        push_tls_error(L, "accept_socket", tls);
         return 2;
     }
-
     lauxh_setmetatable(L, LIBTLS_MT);
-
     return 1;
 }
 
@@ -579,65 +553,61 @@ static int accept_fds_lua(lua_State *L)
 
     if (tls_accept_fds(tls->ctx, &c->ctx, fdr, fdw)) {
         lua_pushnil(L);
-        push_tls_error(L, tls);
+        push_tls_error(L, "accept_fds", tls);
         return 2;
     }
-
     lauxh_setmetatable(L, LIBTLS_MT);
-
     return 1;
 }
 
 static int reset_lua(lua_State *L)
 {
     ltls_t *tls = lauxh_checkudata(L, 1, LIBTLS_MT);
-
     tls_reset(tls->ctx);
-
     return 0;
 }
 
 static int tostring_lua(lua_State *L)
 {
-    return tostring_mt(L, LIBTLS_MT);
+    return libtls_tostring_mt(L, LIBTLS_MT);
 }
 
 static int gc_lua(lua_State *L)
 {
     ltls_t *tls = lua_touserdata(L, 1);
-
     tls_free(tls->ctx);
-
     return 0;
 }
 
-static int new_lua(lua_State *L, struct tls *(*fn)(void))
+static int new_lua(lua_State *L, const char *op, struct tls *(*fn)(void))
 {
     ltls_config_t *cfg = lauxh_checkudata(L, 1, LIBTLS_CONFIG_MT);
     ltls_t *tls        = lua_newuserdata(L, sizeof(ltls_t));
 
-    if (!(tls->ctx = fn()) || tls_configure(tls->ctx, cfg->ctx)) {
-        if (tls && tls->ctx) {
-            tls_free(tls->ctx);
-        }
+    errno    = 0;
+    tls->ctx = fn();
+    if (!tls->ctx) {
         lua_pushnil(L);
-        lua_pushstring(L, strerror(errno));
+        libtls_new_error_from_errno(L, op);
+        return 2;
+    } else if (tls_configure(tls->ctx, cfg->ctx)) {
+        lua_pushnil(L);
+        push_tls_error(L, op, tls);
+        tls_free(tls->ctx);
         return 2;
     }
-
     lauxh_setmetatable(L, LIBTLS_MT);
-
     return 1;
 }
 
 static int server_lua(lua_State *L)
 {
-    return new_lua(L, tls_server);
+    return new_lua(L, "server", tls_server);
 }
 
 static int client_lua(lua_State *L)
 {
-    return new_lua(L, tls_client);
+    return new_lua(L, "client", tls_client);
 }
 
 LUALIB_API int luaopen_libtls(lua_State *L)
@@ -775,6 +745,10 @@ LUALIB_API int luaopen_libtls(lua_State *L)
     lauxh_pushint2tbl(L, "TLS_API", TLS_API);
     lauxh_pushint2tbl(L, "MAX_SESSION_ID_LENGTH", TLS_MAX_SESSION_ID_LENGTH);
     lauxh_pushint2tbl(L, "TICKET_KEY_SIZE", TLS_TICKET_KEY_SIZE);
+
+    // add libtls.ERROR type
+    libtls_error_init(L);
+    lua_setfield(L, -2, "ERROR");
 
     return 1;
 }

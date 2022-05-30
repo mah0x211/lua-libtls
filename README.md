@@ -1,5 +1,8 @@
 # lua-libtls
 
+[![test](https://github.com/mah0x211/lua-libtls/actions/workflows/test.yml/badge.svg)](https://github.com/mah0x211/lua-libtls/actions/workflows/test.yml)
+
+
 libtls bindings for lua.
 
 **NOTE:** this module is under heavy development.
