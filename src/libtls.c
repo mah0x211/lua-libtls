@@ -413,9 +413,13 @@ static int write_lua(lua_State *L)
 
     default:
         lua_pushinteger(L, rv);
-        lua_pushnil(L);
-        lua_pushboolean(L, len - (size_t)rv);
-        return 3;
+        if (len - (size_t)rv) {
+            lua_pushnil(L);
+            lua_pushboolean(L, 1);
+            lua_pushinteger(L, TLS_WANT_POLLOUT);
+            return 4;
+        }
+        return 1;
     }
 }
 
