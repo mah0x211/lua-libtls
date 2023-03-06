@@ -55,9 +55,9 @@ jobs:
       run: |
         sudo apt install lcov -y
         sudo apt install libtool
-        wget https://causal.agency/libretls/libretls-3.5.1.tar.gz
-        tar xvzf ./libretls-3.5.1.tar.gz
-        cd ./libretls-3.5.1
+        wget https://causal.agency/libretls/libretls-3.5.2.tar.gz
+        tar xvzf ./libretls-3.5.2.tar.gz
+        cd ./libretls-3.5.2
         autoreconf -fi
         ./configure
         make all
