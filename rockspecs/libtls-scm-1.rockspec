@@ -11,7 +11,7 @@ description = {
 }
 dependencies = {
     "lua >= 5.1",
-    "error >= 0.8.0",
+    "error >= 0.9.0",
     "lauxhlib >= 0.3.1",
 }
 external_dependencies = {
