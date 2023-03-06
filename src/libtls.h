@@ -39,12 +39,12 @@ static inline void libtls_error_init(lua_State *L)
 {
     int top = lua_gettop(L);
 
-    if (!le_registry_get(L, "libtls.ERROR")) {
+    if (!lua_error_registry_get(L, "libtls.ERROR")) {
         // register libtls.ERROR type
         lua_pushliteral(L, "libtls.ERROR");
         lua_pushinteger(L, -1);
         lua_pushliteral(L, "Operation failure");
-        le_new_type(L, top + 1);
+        lua_error_new_type(L, top + 1);
     }
 }
 
@@ -53,7 +53,7 @@ static inline void libtls_new_error(lua_State *L, const char *op,
 {
     int top = lua_gettop(L);
 
-    le_registry_get(L, "libtls.ERROR");
+    lua_error_registry_get(L, "libtls.ERROR");
     if (msg || op) {
         if (msg) {
             lua_pushstring(L, msg);
@@ -65,9 +65,9 @@ static inline void libtls_new_error(lua_State *L, const char *op,
         } else {
             lua_pushnil(L);
         }
-        le_new_message(L, top + 2);
+        lua_error_new_message(L, top + 2);
     }
-    le_new_typed_error(L, top + 1);
+    lua_error_new_typed_error(L, top + 1);
 }
 
 static inline void libtls_new_error_from_errno(lua_State *L, const char *op)
