@@ -22,35 +22,19 @@ external_dependencies = {
     },
 }
 build = {
-    type = "builtin",
-    modules = {
-        libtls = {
-            sources = {
-                "src/libtls.c",
-            },
-            libraries = {
-                "tls",
-            },
-            incdirs = {
-                "$(LIBTLS_INCDIR)",
-            },
-            libdirs = {
-                "$(LIBTLS_LIBDIR)",
-            },
-        },
-        ["libtls.config"] = {
-            sources = {
-                "src/config.c",
-            },
-            libraries = {
-                "tls",
-            },
-            incdirs = {
-                "$(LIBTLS_INCDIR)",
-            },
-            libdirs = {
-                "$(LIBTLS_LIBDIR)",
-            },
-        },
+    type = "make",
+    build_variables = {
+        SRCDIR = "src",
+        CFLAGS = "$(CFLAGS)",
+        WARNINGS = "-Wall -Wno-trigraphs -Wmissing-field-initializers -Wreturn-type -Wmissing-braces -Wparentheses -Wno-switch -Wunused-function -Wunused-label -Wunused-parameter -Wunused-variable -Wunused-value -Wuninitialized -Wunknown-pragmas -Wshadow -Wsign-compare",
+        CPPFLAGS = "-I$(LUA_INCDIR) -I$(LIBTLS_INCDIR)",
+        LDFLAGS = "$(LIBFLAG) -L$(LIBTLS_LIBDIR) -ltls",
+        LIB_EXTENSION = "$(LIB_EXTENSION)",
+        LIBTLS_COVERAGE = "$(LIBTLS_COVERAGE)",
+    },
+    install_variables = {
+        SRCDIR = "src",
+        INST_LIBDIR = "$(LIBDIR)",
+        LIB_EXTENSION = "$(LIB_EXTENSION)",
     },
 }
